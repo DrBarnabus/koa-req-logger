@@ -11,7 +11,22 @@ As well as logging requests, this module also sets the HTTP Headers Date, X-Resp
 TODO: Create install instructions.
 
 # Usage Example
-TODO: Create a usage example.
+```js
+const KoaLogger = require('@drbarnabus/koa-logger');
+const Koa = require('koa');
+
+const logger = new KoaLogger(); // Can also take an options parameter.
+
+const app = new Koa();
+
+app.use(logger.middleware);
+
+app.use((ctx) => {
+  ctx.body = 'Hello World!';
+});
+
+app.listen(3000);
+```
 
 # Caveats
 ## koa-router allowedMethods()
