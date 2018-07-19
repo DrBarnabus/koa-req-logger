@@ -1,0 +1,23 @@
+{
+  "name": "@drbarnabus/koa-logger",
+  "version": "0.0.1",
+  "description": "A koa logging middleware, logs requests and errors. Also adds date and x-response-time to response headers.",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint index.js lib"
+  },
+  "repository": "https://drbarnabus.visualstudio.com/DrBarnabus%20Website/_git/Koa-Logger",
+  "author": "DrBarnabus <drbarnabus@drbarnabus.com> (https://drbarnabus.com)",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "eslint-config-koa": "^2.0.2",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "pino": "^4.17.3",
+    "uuid": "^3.3.2"
+  }
+}
