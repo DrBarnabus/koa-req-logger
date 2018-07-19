@@ -1,20 +1,27 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# Introduction
+A simple logging middleware for the [koa](https://github.com/koajs/koa) http middleware framework for nodejs. This module uses the [pino](https://github.com/pinojs/pino) logger and was inspired by the [koa-pino-logger](https://github.com/pinojs/koa-pino-logger) module.
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+As well as logging requests, this module also sets the HTTP Headers Date, X-Response-Time and X-Request-ID.
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+- The *X-Request-ID* HTTP Header is either set to a new uuid or the value of the X-Request-ID passed in the request so that requests can be tracked through multiple services.
+- The *Date* HTTP Header is set to the date that the request was recieved with the API.
+- The *X-Response-Time* HTTP Header is set as the response time in milliseconds.
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+# Install
+TODO: Create install instructions.
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://www.visualstudio.com/en-us/docs/git/create-a-readme). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+# Usage Example
+TODO: Create a usage example.
+
+# Caveats
+## koa-router allowedMethods()
+When using the [koa-router](https://github.com/alexmingoia/koa-router) allowedMethods middleware, the response errors are not caught by the error logger and are instead logged as successful requests. In most applications this is fine, but in the instance that you want these failures to be logged as errors a small change needs to be made to the middleware function details [here⇗](docs/koa-router-allowedMethods-fix.md).
+
+# Test
+TODO: Write tests and document how to run them.
+
+# Aknowledgements
+TODO: Add aknowledgements if required or remove this section.
+
+# Licence
+Licenced under [MIT](./license).

@@ -1,0 +1,1 @@
+TODO: Document fix for koa-router allowedMethods() function not throwing errors in the way expected by the logger.
