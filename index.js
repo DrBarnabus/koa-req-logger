@@ -85,7 +85,7 @@ module.exports = class KoaReqLogger {
     this.setResponseTime(ctx);
 
     ctx.log.info(
-      { res: ctx.res, responseTime: ctx.responseTime, startDate: ctx.start.toUTCString() },
+      { res: ctx.response, responseTime: ctx.responseTime, startDate: ctx.start.toUTCString() },
       `${ctx.ip} - ${ctx.method} ${ctx.path} - ${ctx.status} ${ctx.responseTime}ms`
     );
   }
@@ -109,7 +109,7 @@ module.exports = class KoaReqLogger {
     };
 
     ctx.log.error(
-      { res: ctx.res, err: e, responseTime: ctx.responseTime, startDate: ctx.start.toUTCString() },
+      { res: ctx.response, err: e, responseTime: ctx.responseTime, startDate: ctx.start.toUTCString() },
       `${ctx.ip} - ${ctx.method} ${ctx.path} - ${ctx.status} ${ctx.responseTime}ms`
     );
   }

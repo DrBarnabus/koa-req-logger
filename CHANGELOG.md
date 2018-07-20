@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file. This projec
 
 ## [Upcoming]
 Upcoming release of the package.
+## Fixed
+- Fixed an issue where response object wasn't populated correctly in the log.
 
 ## 1.0.0 - 2018-07-20
 First release of the package.
