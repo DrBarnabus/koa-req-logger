@@ -1,7 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2018-07-20
+## [Upcoming]
+Upcoming release of the package.
+
+## 1.0.0 - 2018-07-20
 First release of the package.
 ### Added
 - Added this CHANGELOG file to keep track of changes.
@@ -12,4 +15,4 @@ First release of the package.
 
 
 <!-- LINKS --->
-[1.0.0]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.0.0...HEAD
+[Upcoming]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.0.0...HEAD
