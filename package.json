@@ -2,7 +2,18 @@
   "name": "koa-req-logger",
   "version": "0.0.1",
   "description": "A koa logging middleware, logs requests and errors. Also adds date and x-response-time to response headers.",
-  "keywords": ["koa", "logging", "logger", "request", "pino", "middleware", "X-Request-ID", "X-Response-Time", "http", "header"],
+  "keywords": [
+    "koa",
+    "logging",
+    "logger",
+    "request",
+    "pino",
+    "middleware",
+    "X-Request-ID",
+    "X-Response-Time",
+    "http",
+    "header"
+  ],
   "main": "index.js",
   "scripts": {
     "test": "jest",
