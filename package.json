@@ -2,6 +2,7 @@
   "name": "koa-req-logger",
   "version": "0.0.1",
   "description": "A koa logging middleware, logs requests and errors. Also adds date and x-response-time to response headers.",
+  "keywords": ["koa", "logging", "logger", "request", "pino", "middleware", "X-Request-ID", "X-Response-Time", "http", "header"],
   "main": "index.js",
   "scripts": {
     "test": "jest",
@@ -11,7 +12,6 @@
   "repository": "git@github.com:DrBarnabus/koa-req-logger.git",
   "author": "DrBarnabus <drbarnabus@drbarnabus.com> (https://drbarnabus.com)",
   "license": "MIT",
-  "private": true,
   "dependencies": {
     "pino": "^4.17.3",
     "uuid": "^3.3.2"
