@@ -31,6 +31,13 @@ module.exports = class KoaReqLogger {
     opts.serializers.res = opts.serializers.res || stdSerializers.res;
     opts.serializers.err = opts.serializers.err || stdSerializers.err;
 
+    if (typeof opts.uuidFunction === 'function') {
+      this.uuidFunction = opts.uuidFunction;
+      delete opts.uuidFunction;
+    } else {
+      this.uuidFunction = uuidv4;
+    }
+
     this.logger = pino(opts);
   }
 
@@ -46,7 +53,7 @@ module.exports = class KoaReqLogger {
       ctx.id = ctx.get('X-Request-ID');
       ctx.set('X-Request-ID', ctx.id);
     } else {
-      ctx.id = uuidv4();
+      ctx.id = this.uuidFunction();
       ctx.set('X-Request-ID', ctx.id);
     }
   }

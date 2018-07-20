@@ -3,7 +3,9 @@ All notable changes to this project will be documented in this file. This projec
 
 ## [Upcoming]
 Upcoming release of the package.
-## Fixed
+### Added
+- Functionality to override the uuidv4 that is used automatically for the X-Request-ID with your own uuid function.
+### Fixed
 - Fixed an issue where response object wasn't populated correctly in the log.
 
 ## 1.0.0 - 2018-07-20
