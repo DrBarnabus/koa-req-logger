@@ -34,11 +34,43 @@ module.exports = class KoaReqLogger {
     opts.serializers.res = opts.serializers.res || stdSerializers.res;
     opts.serializers.err = opts.serializers.err || stdSerializers.err;
 
-    // Check if a specific header has been disabled, defaults to all enabled
-    opts.headers = opts.headers || {};
-    this.idHeader = opts.headers.id || true;
-    this.startHeader = opts.headers.start || true;
-    this.responseTimeHeader = opts.headers.responseTime || true;
+    // Check if all headers should be disabled
+    if (typeof opts.headers === 'boolean') {
+      console.log('header is boolean');
+      if (opts.headers == true) {
+        this.idHeader = true;
+        this.startHeader = true;
+        this.responseTimeHeader = true;
+      } else {
+        this.idHeader = false;
+        this.startHeader = false;
+        this.responseTimeHeader = false;
+      }
+    } else {
+      opts.headers = opts.headers || {};
+
+      // Check if X-Request-ID Header should be disabled
+      if (opts.headers.id !== undefined) {
+        this.idHeader = opts.headers.id;
+      } else {
+        this.idHeader = true;
+      }
+
+      // Check if Date Header should be disabled
+      if (opts.headers.date !== undefined) {
+        this.startHeader = opts.headers.date;
+      } else {
+        this.startHeader = true;
+      }
+
+      // Check if X-Response-Time should be disabled
+      if (opts.headers.responseTime !== undefined) {
+        this.responseTimeHeader = opts.headers.responseTime;
+      } else {
+        this.responseTimeHeader = true;
+      }
+    }
+
     delete opts.headers;
 
     // Check if a uuidFunction has been passed in options and use if available
@@ -82,6 +114,8 @@ module.exports = class KoaReqLogger {
 
     if (this.startHeader) {
       ctx.set('Date', ctx.start.toUTCString());
+    } else {
+      ctx.remove('Date'); // Remove default header set by koa
     }
 
     ctx.log.info({ req: ctx.req, startDate: ctx.start.toUTCString() }, `${ctx.request.ip} - ${ctx.method} ${ctx.path}`);
