@@ -1,6 +1,7 @@
 const pino = require('pino');
 const uuidv4 = require('uuid/v4');
 
+// Set of standard serializers
 const stdSerializers = {
   req: require('./lib/req'),
   res: require('./lib/res'),
@@ -27,10 +28,13 @@ module.exports = class KoaReqLogger {
 
     opts = opts || {};
     opts.serializers = opts.serializers || {};
+
+    // Set standard serializers
     opts.serializers.req = opts.serializers.req || stdSerializers.req;
     opts.serializers.res = opts.serializers.res || stdSerializers.res;
     opts.serializers.err = opts.serializers.err || stdSerializers.err;
 
+    // Check if a uuidFunction has been passed in options and use if available
     if (typeof opts.uuidFunction === 'function') {
       this.uuidFunction = opts.uuidFunction;
       delete opts.uuidFunction;
@@ -148,6 +152,10 @@ module.exports = class KoaReqLogger {
     }
   }
 
+  /**
+   * This function returns the middleware function for use in koa
+   * @api public
+   */
   getMiddleware() {
     return this.middleware;
   }
