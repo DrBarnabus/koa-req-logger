@@ -184,7 +184,7 @@ module.exports = class KoaReqLogger {
     this.setRequestId(ctx);
 
     // Create a child of the logger with the request id as the key
-    ctx.log = ctx.logger = ctx.req.log = ctx.request.log = ctx.response.log = this.logger.child({ id: ctx.id });
+    ctx.log = ctx.logger = ctx.req.log = ctx.request.log = ctx.res.log = this.logger.child({ id: ctx.id });
 
     // Start the request logging
     this.startRequest(ctx);
