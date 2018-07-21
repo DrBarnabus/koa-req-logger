@@ -1,8 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Upcoming]
-Upcoming release of the package.
+## [1.1.0] - 2018-07-21
 ### Added
 - Functionality to override the uuidv4 that is used automatically for the X-Request-ID with your own uuid function.
 - Updated the readme file, with an example of log usage in a request.
@@ -20,4 +19,5 @@ First release of the package.
 
 
 <!-- LINKS --->
-[Upcoming]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.0.0...v1.1.0
