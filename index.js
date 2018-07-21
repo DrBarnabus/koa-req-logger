@@ -27,12 +27,19 @@ module.exports = class KoaReqLogger {
     this.middleware = this.middleware.bind(this);
 
     opts = opts || {};
-    opts.serializers = opts.serializers || {};
 
-    // Set standard serializers
+    // Set standard serializers, if no custom ones used
+    opts.serializers = opts.serializers || {};
     opts.serializers.req = opts.serializers.req || stdSerializers.req;
     opts.serializers.res = opts.serializers.res || stdSerializers.res;
     opts.serializers.err = opts.serializers.err || stdSerializers.err;
+
+    // Check if a specific header has been disabled, defaults to all enabled
+    opts.headers = opts.headers || {};
+    this.idHeader = opts.headers.id || true;
+    this.startHeader = opts.headers.start || true;
+    this.responseTimeHeader = opts.headers.responseTime || true;
+    delete opts.headers;
 
     // Check if a uuidFunction has been passed in options and use if available
     if (typeof opts.uuidFunction === 'function') {
@@ -55,9 +62,11 @@ module.exports = class KoaReqLogger {
   setRequestId(ctx) {
     if (ctx.get('X-Request-ID')) {
       ctx.id = ctx.get('X-Request-ID');
-      ctx.set('X-Request-ID', ctx.id);
     } else {
       ctx.id = this.uuidFunction();
+    }
+
+    if (this.idHeader) {
       ctx.set('X-Request-ID', ctx.id);
     }
   }
@@ -70,7 +79,10 @@ module.exports = class KoaReqLogger {
    */
   startRequest(ctx) {
     ctx.start = new Date();
-    ctx.set('Date', ctx.start.toUTCString());
+
+    if (this.startHeader) {
+      ctx.set('Date', ctx.start.toUTCString());
+    }
 
     ctx.log.info({ req: ctx.req, startDate: ctx.start.toUTCString() }, `${ctx.request.ip} - ${ctx.method} ${ctx.path}`);
   }
@@ -83,7 +95,10 @@ module.exports = class KoaReqLogger {
   setResponseTime(ctx) {
     let now = new Date();
     ctx.responseTime = now - ctx.start;
-    ctx.set('X-Response-Time', `${ctx.responseTime}ms`);
+
+    if (this.responseTimeHeader) {
+      ctx.set('X-Response-Time', `${ctx.responseTime}ms`);
+    }
   }
 
   /**
