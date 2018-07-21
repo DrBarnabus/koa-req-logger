@@ -80,6 +80,12 @@ module.exports = class KoaReqLogger {
       this.uuidFunction = uuidv4;
     }
 
+    delete opts.uuidFunction;
+
+    this.alwaysError = opts.alwaysError || false;
+
+    delete opts.alwaysError;
+
     this.logger = pino(opts);
   }
 
@@ -167,10 +173,17 @@ module.exports = class KoaReqLogger {
       }
     };
 
-    ctx.log.error(
-      { res: ctx.response, err: e, responseTime: ctx.responseTime, startDate: ctx.start.toUTCString() },
-      `${ctx.ip} - ${ctx.method} ${ctx.path} - ${ctx.status} ${ctx.responseTime}ms`
-    );
+    if (((ctx.status / 100) | 0) == 5 || this.alwaysError) {
+      ctx.log.error(
+        { res: ctx.response, err: e, responseTime: ctx.responseTime, startDate: ctx.start.toUTCString() },
+        `${ctx.ip} - ${ctx.method} ${ctx.path} - ${ctx.status} ${ctx.responseTime}ms`
+      );
+    } else {
+      ctx.log.warn(
+        { res: ctx.response, err: e, responseTime: ctx.responseTime, startDate: ctx.start.toUTCString() },
+        `${ctx.ip} - ${ctx.method} ${ctx.path} - ${ctx.status} ${ctx.responseTime}ms`
+      );
+    }
   }
 
   /**
