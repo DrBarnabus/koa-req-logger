@@ -151,4 +151,170 @@ describe('middleware', () => {
     server.close();
     done();
   });
+
+  test('Should return the correct HTTP Status Code if an error is thrown', async done => {
+    // Setup
+    const app = new Koa();
+    const logger = new KoaReqLogger({
+      uuidFunction: () => {
+        return 'test-uuid';
+      }
+    });
+    app.use(logger.getMiddleware());
+
+    app.use((ctx, next) => {
+      ctx.status = 200;
+      ctx.body = {
+        data: 'Hello World!'
+      };
+
+      // Simulate an error being thrown
+      ctx.throw(400, 'Bad Request');
+    });
+
+    let server = app.listen();
+
+    // Test
+    const response = await request(server).get('/');
+    expect(response.status).toEqual(400);
+    expect(response.type).toEqual('application/json');
+
+    // Teardown
+    server.close();
+    done();
+  });
+
+  test('Should return an error object if an error is thrown in a request handler', async done => {
+    // Setup
+    const app = new Koa();
+    const logger = new KoaReqLogger({
+      uuidFunction: () => {
+        return 'test-uuid';
+      }
+    });
+    app.use(logger.getMiddleware());
+
+    app.use((ctx, next) => {
+      ctx.status = 200;
+      ctx.body = {
+        data: 'Hello World!'
+      };
+
+      // Simulate an error being thrown
+      ctx.throw(400, 'Bad Request');
+    });
+
+    let server = app.listen();
+
+    // Test
+    const response = await request(server).get('/');
+    expect(response.status).toEqual(400);
+    expect(response.type).toEqual('application/json');
+    expect(response.body.error).toBeDefined();
+
+    // Teardown
+    server.close();
+    done();
+  });
+
+  test('Should return an error object, with the correct error code if an error is thrown', async done => {
+    // Setup
+    const app = new Koa();
+    const logger = new KoaReqLogger({
+      uuidFunction: () => {
+        return 'test-uuid';
+      }
+    });
+    app.use(logger.getMiddleware());
+
+    app.use((ctx, next) => {
+      ctx.status = 200;
+      ctx.body = {
+        data: 'Hello World!'
+      };
+
+      // Simulate an error being thrown
+      ctx.throw(400, 'Bad Request');
+    });
+
+    let server = app.listen();
+
+    // Test
+    const response = await request(server).get('/');
+    expect(response.status).toEqual(400);
+    expect(response.type).toEqual('application/json');
+    expect(response.body.error.code).toBeDefined();
+    expect(response.body.error.code).toEqual(400);
+
+    // Teardown
+    server.close();
+    done();
+  });
+
+  test('Should return an error object, with the correct error message if an error is thrown', async done => {
+    // Setup
+    const app = new Koa();
+    const logger = new KoaReqLogger({
+      uuidFunction: () => {
+        return 'test-uuid';
+      }
+    });
+    app.use(logger.getMiddleware());
+
+    app.use((ctx, next) => {
+      ctx.status = 200;
+      ctx.body = {
+        data: 'Hello World!'
+      };
+
+      // Simulate an error being thrown
+      ctx.throw(400, 'Bad Request');
+    });
+
+    let server = app.listen();
+
+    // Test
+    const response = await request(server).get('/');
+    expect(response.status).toEqual(400);
+    expect(response.type).toEqual('application/json');
+    expect(response.body.error.message).toBeDefined();
+    expect(response.body.error.message).toEqual('Bad Request');
+
+    // Teardown
+    server.close();
+    done();
+  });
+
+  test('Should not return the rest of the response body on error', async done => {
+    // Setup
+    const app = new Koa();
+    const logger = new KoaReqLogger({
+      uuidFunction: () => {
+        return 'test-uuid';
+      }
+    });
+    app.use(logger.getMiddleware());
+
+    app.use((ctx, next) => {
+      ctx.status = 200;
+      ctx.body = {
+        data: 'Hello World!'
+      };
+
+      // Simulate an error being thrown
+      ctx.throw(400, 'Bad Request');
+    });
+
+    let server = app.listen();
+
+    // Test
+    const response = await request(server).get('/');
+    expect(response.status).toEqual(400);
+    expect(response.type).toEqual('application/json');
+    expect(response.body.data).toBeUndefined();
+
+    // Teardown
+    server.close();
+    done();
+  });
 });
