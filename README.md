@@ -1,11 +1,11 @@
 # Introduction
-A simple logging middleware for the [koa](https://github.com/koajs/koa) http framework for nodejs. This module uses the [pino](https://github.com/pinojs/pino) logger and was inspired by the [koa-pino-logger](https://github.com/pinojs/koa-pino-logger) module.
+A simple logging middleware for the [koa] http framework for nodejs. This module uses the [pino] logger and was inspired by the [koa-pino-logger] module.
 
 As well as logging requests and providing a log object in requests, this module also sets the HTTP Headers Date, X-Response-Time and X-Request-ID.
 
-- The *X-Request-ID* HTTP Header is either set to a new uuid or the value of the X-Request-ID passed in the request so that requests can be tracked through multiple services.
-- The *Date* HTTP Header is set to the date that the request was recieved with the API.
-- The *X-Response-Time* HTTP Header is set as the response time in milliseconds.
+- The X-Request-ID HTTP Header is either set to a new uuid or the value of the X-Request-ID passed in the request so that requests can be tracked through multiple services.
+- The Date HTTP Header is set to the date that the request was recieved with the API.
+- The X-Response-Time HTTP Header is set as the response time in milliseconds.
 
 ## Contents
 - [Install](#Install)
@@ -52,7 +52,7 @@ Produces a similar output to the following json, which can then be parsed with p
 
 # Caveats
 ## koa-router allowedMethods()
-When using the [koa-router](https://github.com/alexmingoia/koa-router) allowedMethods middleware, the response errors are not caught by the error logger and are instead logged as successful requests. In most applications this is fine, but in the instance that you want these failures to be logged as errors you need to log these as errors follow the instructions [here⇗](docs/koa-router-allowedMethods-fix.md).
+When using the [koa-router] allowedMethods middleware, the response errors are not caught by the error logger and are instead logged as successful requests. In most applications this is fine, but in the instance that you want these failures to be logged as errors you need to log these as errors follow the instructions [here⇗](docs/koa-router-allowedMethods-fix.md).
 
 # Test
 ## NPM
@@ -66,3 +66,9 @@ yarn test
 
 # License
 Licensed under [MIT](./LICENSE).
+
+<!-- Links --->
+[koa]: https://github.com/koajs/koa
+[pino]: https://github.com/pinojs/pino
+[koa-pino-logger]: https://github.com/pinojs/koa-pino-logger
+[koa-router]: https://github.com/alexmingoia/koa-router
