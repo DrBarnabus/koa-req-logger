@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Added functionality to allow each individual header to be turned off. This can be configured by setting one of; headers.id, headers.date and headers.responseTime to false in the options object passed to KoaReqLogger.
+- Added functionality to allow all headers to be disabled by setting headers to false in the options object passed to KoaReqLogger.
+
 ## [1.1.0] - 2018-07-21
 ### Added
 - Functionality to override the uuidv4 that is used automatically for the X-Request-ID with your own uuid function.
