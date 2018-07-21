@@ -36,7 +36,6 @@ module.exports = class KoaReqLogger {
 
     // Check if all headers should be disabled
     if (typeof opts.headers === 'boolean') {
-      console.log('header is boolean');
       if (opts.headers == true) {
         this.idHeader = true;
         this.startHeader = true;
