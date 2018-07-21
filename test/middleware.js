@@ -5,6 +5,11 @@ const Koa = require('koa');
 const KoaReqLogger = require('../');
 
 describe('middleware', () => {
+  test('getMiddleware() should return a function', () => {
+    const logger = new KoaReqLogger();
+    expect(typeof logger.getMiddleware()).toEqual('function');
+  });
+
   test('Response should include HTTP Date header', async done => {
     // Setup
     const app = new Koa();
@@ -202,14 +207,14 @@ describe('middleware', () => {
       };
 
       // Simulate an error being thrown
-      ctx.throw(400, 'Bad Request');
+      ctx.throw(500, 'Internal Server Error');
     });
 
     let server = app.listen();
 
     // Test
     const response = await request(server).get('/');
-    expect(response.status).toEqual(400);
+    expect(response.status).toEqual(500);
     expect(response.type).toEqual('application/json');
     expect(response.body.error).toBeDefined();
 
@@ -555,6 +560,36 @@ describe('middleware', () => {
     expect(response.headers['x-request-id']).toBeDefined();
     expect(response.headers['date']).toBeDefined();
     expect(response.headers['x-response-time']).toBeDefined();
+
+    // Teardown
+    server.close();
+    done();
+  });
+
+  test('Should still respond correctly with alwaysError option set', async done => {
+    // Setup
+    const app = new Koa();
+    const logger = new KoaReqLogger({
+      alwaysError: true,
+      enabled: false
+    });
+    app.use(logger.getMiddleware());
+
+    app.use((ctx, next) => {
+      ctx.status = 200;
+      ctx.body = {
+        data: 'Hello World!'
+      };
+
+      ctx.throw(400, 'Bad Request');
+    });
+
+    let server = app.listen();
+
+    // Test
+    const response = await request(server).get('/');
+    expect(response.status).toEqual(400);
+    expect(response.type).toEqual('application/json');
 
     // Teardown
     server.close();
