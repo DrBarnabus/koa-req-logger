@@ -36,6 +36,7 @@ const logger = new KoaRequestLogger(); // Can also take an options parameter, wh
 app.use(logger.getMiddleware());
 
 app.use((ctx) => {
+  ctx.log.info({ some: 'object' }, 'Some log message'); // Logger can be used in request and will include request id
   ctx.body = 'Hello World!';
 });
 
