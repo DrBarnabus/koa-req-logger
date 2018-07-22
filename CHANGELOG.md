@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file. This projec
 ### Added
 - Added functionality to allow each individual header to be turned off. This can be configured by setting one of; headers.id, headers.date and headers.responseTime to false in the options object passed to KoaReqLogger.
 - Added functionality to allow all headers to be disabled by setting headers to false in the options object passed to KoaReqLogger.
+- Added tests to get code coverage up to 100%.
 ### Changed
 - By default, errors are now logged as warnings. If the error status is 5** then the error is logged as an error. But this can be changed back to the original behavior, by setting alwaysError to true in the options object passed to KoaReqLogger.
 
