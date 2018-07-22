@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file. This projec
 - Added functionality to allow all headers to be disabled by setting headers to false in the options object passed to KoaReqLogger.
 - Added tests to get code coverage up to 100%.
 - Added API Reference file, documents the options that are available when creating a new instance of KoaReqLogger.
+- Added ci to test builds, badges also added to readme to show build status.
 ### Changed
 - By default, errors are now logged as warnings. If the error status is 5** then the error is logged as an error. But this can be changed back to the original behavior, by setting alwaysError to true in the options object passed to KoaReqLogger.
 ### Fixed
