@@ -1,7 +1,9 @@
 # Introduction
 [![NPM Version][npm-badge]][npm-url]
-[![dependencies-badge]][dependencies-url]
-[![devDependencies-badge]][devDependencies-url]
+[![NPM Downloads][npmd-badge]][npm-url]
+[![Build Status][travis-badge]][travis-url]
+[![Dependencies][dependencies-badge]][dependencies-url]
+[![devDependencies][devDependencies-badge]][devDependencies-url]
 
 A simple logging middleware for the [koa] http framework for nodejs. This module uses the [pino] logger and was inspired by the [koa-pino-logger] module.
 
@@ -74,9 +76,12 @@ Licensed under [MIT](./LICENSE).
 [koa-router]: https://github.com/alexmingoia/koa-router
 
 <!-- Badges --->
-[npm-badge]: https://img.shields.io/npm/v/koa-req-logger.svg?style=flag-square
+[npm-badge]: https://img.shields.io/npm/v/koa-req-logger.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/koa-req-logger
-[dependencies-badge]: https://david-dm.org/drbarnabus/koa-req-logger.svg
+[npmd-badge]: https://img.shields.io/npm/dw/koa-req-logger.svg?style=flat-square
+[travis-badge]: https://img.shields.io/travis/DrBarnabus/koa-req-logger/master.svg?style=flat-square
+[travis-url]: https://travis-ci.org/DrBarnabus/koa-req-logger
+[dependencies-badge]: https://david-dm.org/drbarnabus/koa-req-logger.svg?style=flat-square
 [dependencies-url]: https://david-dm.org/drbarnabus/koa-req-logger
-[devDependencies-badge]: https://david-dm.org/drbarnabus/koa-req-logger/dev-status.svg
+[devDependencies-badge]: https://david-dm.org/drbarnabus/koa-req-logger/dev-status.svg?style=flat-square
 [devDependencies-url]: https://david-dm.org/drbarnabus/koa-req-logger?type=dev
