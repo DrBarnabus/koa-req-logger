@@ -1,4 +1,8 @@
 # Introduction
+[![NPM Version][npm-badge]][npm-url]
+[![dependencies-badge]][dependencies-url]
+[![devDependencies-badge]][devDependencies-url]
+
 A simple logging middleware for the [koa] http framework for nodejs. This module uses the [pino] logger and was inspired by the [koa-pino-logger] module.
 
 As well as logging requests and providing a log object in requests, this module also sets the HTTP Headers Date, X-Response-Time and X-Request-ID.
@@ -68,3 +72,11 @@ Licensed under [MIT](./LICENSE).
 [pino]: https://github.com/pinojs/pino
 [koa-pino-logger]: https://github.com/pinojs/koa-pino-logger
 [koa-router]: https://github.com/alexmingoia/koa-router
+
+<!-- Badges --->
+[npm-badge]: https://img.shields.io/npm/v/koa-req-logger.svg?style=flag-square
+[npm-url]: https://www.npmjs.com/package/koa-req-logger
+[dependencies-badge]: https://david-dm.org/drbarnabus/koa-req-logger.svg
+[dependencies-url]: https://david-dm.org/drbarnabus/koa-req-logger
+[devDependencies-badge]: https://david-dm.org/drbarnabus/koa-req-logger/dev-status.svg
+[devDependencies-url]: https://david-dm.org/drbarnabus/koa-req-logger?type=dev
