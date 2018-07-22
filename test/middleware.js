@@ -4,7 +4,7 @@ const request = require('supertest');
 const Koa = require('koa');
 const KoaReqLogger = require('../');
 
-describe('middleware', () => {
+describe('Middleware', () => {
   test('getMiddleware() should return a function', () => {
     const logger = new KoaReqLogger();
     expect(typeof logger.getMiddleware()).toEqual('function');
