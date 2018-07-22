@@ -4,6 +4,7 @@
 [![Build Status][travis-badge]][travis-url]
 [![Dependencies][dependencies-badge]][dependencies-url]
 [![devDependencies][devDependencies-badge]][devDependencies-url]
+[![NSP Status][nsp-badge]][nsp-url]
 
 A simple logging middleware for the [koa] http framework for nodejs. This module uses the [pino] logger and was inspired by the [koa-pino-logger] module.
 
@@ -85,3 +86,5 @@ Licensed under [MIT](./LICENSE).
 [dependencies-url]: https://david-dm.org/drbarnabus/koa-req-logger
 [devDependencies-badge]: https://david-dm.org/drbarnabus/koa-req-logger/dev-status.svg?style=flat-square
 [devDependencies-url]: https://david-dm.org/drbarnabus/koa-req-logger?type=dev
+[nsp-badge]: https://nodesecurity.io/orgs/drbarnabus/projects/6ff8c390-236a-4538-8686-c7f819a82b14/badge
+[nsp-url]: https://nodesecurity.io/orgs/drbarnabus/projects/6ff8c390-236a-4538-8686-c7f819a82b14
