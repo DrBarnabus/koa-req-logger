@@ -2,6 +2,7 @@
 [![NPM Version][npm-badge]][npm-url]
 [![NPM Downloads][npmd-badge]][npm-url]
 [![Build Status][travis-badge]][travis-url]
+[![Test Coverage][codecov-badge]][codecov-url]
 [![Dependencies][dependencies-badge]][dependencies-url]
 [![devDependencies][devDependencies-badge]][devDependencies-url]
 
@@ -82,6 +83,8 @@ Licensed under [MIT](./LICENSE).
 [travis-badge]: https://img.shields.io/travis/DrBarnabus/koa-req-logger/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/DrBarnabus/koa-req-logger
 [dependencies-badge]: https://david-dm.org/drbarnabus/koa-req-logger.svg?style=flat-square
+[codecov-badge]: https://img.shields.io/codecov/c/github/DrBarnabus/koa-req-logger/master.svg?style=flat-square
+[codecov-url]: https://codecov.io/gh/DrBarnabus/koa-req-logger
 [dependencies-url]: https://david-dm.org/drbarnabus/koa-req-logger
 [devDependencies-badge]: https://david-dm.org/drbarnabus/koa-req-logger/dev-status.svg?style=flat-square
 [devDependencies-url]: https://david-dm.org/drbarnabus/koa-req-logger?type=dev
