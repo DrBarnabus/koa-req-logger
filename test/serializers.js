@@ -71,7 +71,7 @@ describe('Serializers', () => {
         message: 'Error Message',
         stack: 'Error Stack'
       };
-      
+
       const serialized = errSerializer(err);
 
       expect(serialized.message).toEqual(err.message);
