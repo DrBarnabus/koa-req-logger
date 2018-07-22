@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Added functionality to allow each individual header to be turned off. This can be configured by setting one of; headers.id, headers.date and headers.responseTime to false in the options object passed to KoaReqLogger.
+- Added functionality to allow all headers to be disabled by setting headers to false in the options object passed to KoaReqLogger.
+- Added tests to get code coverage up to 100%.
+- Added API Reference file, documents the options that are available when creating a new instance of KoaReqLogger.
+### Changed
+- By default, errors are now logged as warnings. If the error status is 5** then the error is logged as an error. But this can be changed back to the original behavior, by setting alwaysError to true in the options object passed to KoaReqLogger.
+### Fixed
+- Fixed a problem in the readme file example where the wrong class name was used.
+
 ## [1.1.0] - 2018-07-21
 ### Added
 - Functionality to override the uuidv4 that is used automatically for the X-Request-ID with your own uuid function.

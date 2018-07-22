@@ -27,12 +27,50 @@ module.exports = class KoaReqLogger {
     this.middleware = this.middleware.bind(this);
 
     opts = opts || {};
-    opts.serializers = opts.serializers || {};
 
-    // Set standard serializers
+    // Set standard serializers, if no custom ones used
+    opts.serializers = opts.serializers || {};
     opts.serializers.req = opts.serializers.req || stdSerializers.req;
     opts.serializers.res = opts.serializers.res || stdSerializers.res;
     opts.serializers.err = opts.serializers.err || stdSerializers.err;
+
+    // Check if all headers should be disabled
+    if (typeof opts.headers === 'boolean') {
+      if (opts.headers == true) {
+        this.idHeader = true;
+        this.startHeader = true;
+        this.responseTimeHeader = true;
+      } else {
+        this.idHeader = false;
+        this.startHeader = false;
+        this.responseTimeHeader = false;
+      }
+    } else {
+      opts.headers = opts.headers || {};
+
+      // Check if X-Request-ID Header should be disabled
+      if (opts.headers.id !== undefined) {
+        this.idHeader = opts.headers.id;
+      } else {
+        this.idHeader = true;
+      }
+
+      // Check if Date Header should be disabled
+      if (opts.headers.date !== undefined) {
+        this.startHeader = opts.headers.date;
+      } else {
+        this.startHeader = true;
+      }
+
+      // Check if X-Response-Time should be disabled
+      if (opts.headers.responseTime !== undefined) {
+        this.responseTimeHeader = opts.headers.responseTime;
+      } else {
+        this.responseTimeHeader = true;
+      }
+    }
+
+    delete opts.headers;
 
     // Check if a uuidFunction has been passed in options and use if available
     if (typeof opts.uuidFunction === 'function') {
@@ -41,6 +79,12 @@ module.exports = class KoaReqLogger {
     } else {
       this.uuidFunction = uuidv4;
     }
+
+    delete opts.uuidFunction;
+
+    this.alwaysError = opts.alwaysError || false;
+
+    delete opts.alwaysError;
 
     this.logger = pino(opts);
   }
@@ -55,9 +99,11 @@ module.exports = class KoaReqLogger {
   setRequestId(ctx) {
     if (ctx.get('X-Request-ID')) {
       ctx.id = ctx.get('X-Request-ID');
-      ctx.set('X-Request-ID', ctx.id);
     } else {
       ctx.id = this.uuidFunction();
+    }
+
+    if (this.idHeader) {
       ctx.set('X-Request-ID', ctx.id);
     }
   }
@@ -70,7 +116,12 @@ module.exports = class KoaReqLogger {
    */
   startRequest(ctx) {
     ctx.start = new Date();
-    ctx.set('Date', ctx.start.toUTCString());
+
+    if (this.startHeader) {
+      ctx.set('Date', ctx.start.toUTCString());
+    } else {
+      ctx.remove('Date'); // Remove default header set by koa
+    }
 
     ctx.log.info({ req: ctx.req, startDate: ctx.start.toUTCString() }, `${ctx.request.ip} - ${ctx.method} ${ctx.path}`);
   }
@@ -83,7 +134,10 @@ module.exports = class KoaReqLogger {
   setResponseTime(ctx) {
     let now = new Date();
     ctx.responseTime = now - ctx.start;
-    ctx.set('X-Response-Time', `${ctx.responseTime}ms`);
+
+    if (this.responseTimeHeader) {
+      ctx.set('X-Response-Time', `${ctx.responseTime}ms`);
+    }
   }
 
   /**
@@ -119,10 +173,17 @@ module.exports = class KoaReqLogger {
       }
     };
 
-    ctx.log.error(
-      { res: ctx.response, err: e, responseTime: ctx.responseTime, startDate: ctx.start.toUTCString() },
-      `${ctx.ip} - ${ctx.method} ${ctx.path} - ${ctx.status} ${ctx.responseTime}ms`
-    );
+    if (((ctx.status / 100) | 0) == 5 || this.alwaysError) {
+      ctx.log.error(
+        { res: ctx.response, err: e, responseTime: ctx.responseTime, startDate: ctx.start.toUTCString() },
+        `${ctx.ip} - ${ctx.method} ${ctx.path} - ${ctx.status} ${ctx.responseTime}ms`
+      );
+    } else {
+      ctx.log.warn(
+        { res: ctx.response, err: e, responseTime: ctx.responseTime, startDate: ctx.start.toUTCString() },
+        `${ctx.ip} - ${ctx.method} ${ctx.path} - ${ctx.status} ${ctx.responseTime}ms`
+      );
+    }
   }
 
   /**
@@ -136,7 +197,7 @@ module.exports = class KoaReqLogger {
     this.setRequestId(ctx);
 
     // Create a child of the logger with the request id as the key
-    ctx.log = ctx.logger = ctx.req.log = ctx.request.log = ctx.response.log = this.logger.child({ id: ctx.id });
+    ctx.log = ctx.logger = ctx.req.log = ctx.request.log = ctx.res.log = this.logger.child({ id: ctx.id });
 
     // Start the request logging
     this.startRequest(ctx);
