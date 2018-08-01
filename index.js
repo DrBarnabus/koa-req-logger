@@ -165,13 +165,23 @@ module.exports = class KoaReqLogger {
     this.setResponseTime(ctx);
 
     // Construct error response
-    ctx.status = e.status;
-    ctx.body = {
-      error: {
-        code: e.status,
-        message: e.message
-      }
-    };
+    if (e.status !== undefined) {
+      ctx.status = e.status;
+      ctx.body = {
+        error: {
+          code: e.status,
+          message: e.message
+        }
+      };
+    } else {
+      ctx.status = 500;
+      ctx.body = {
+        error: {
+          code: 500,
+          message: 'Internal Server Error'
+        }
+      };
+    }
 
     if (((ctx.status / 100) | 0) == 5 || this.alwaysError) {
       ctx.log.error(
