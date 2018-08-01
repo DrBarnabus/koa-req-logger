@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ## [Unreleased]
 ### Fixed
-- Fixed an issue where the logger didn't correctly handle errors thrown without a status. These are now handled as status 500 internal server errors to prevent it not being logged.
+- Fixed an issue where the logger didn't correctly handle errors thrown without a status. These are now handled as status 500 internal server errors to prevent it not being logged. An example would be <code>throw new Error('Generic Error with no Status');</code> which will now respond with a generic status 500 error.
 
 ## [1.2.0] - 2018-07-23
 ### Added
