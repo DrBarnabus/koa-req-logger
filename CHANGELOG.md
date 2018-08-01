@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.2.1] - 2018-08-01
 ### Fixed
 - Fixed an issue where the logger didn't correctly handle errors thrown without a status. These are now handled as status 500 internal server errors to prevent it not being logged. An example would be <code>throw new Error('Generic Error with no Status');</code> which will now respond with a generic status 500 error.
 
@@ -35,6 +35,6 @@ First release of the package.
 
 
 <!-- LINKS --->
-[Unreleased]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.2.0...HEAD
+[1.2.1]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.0.0...v1.1.0
