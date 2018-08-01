@@ -49,6 +49,7 @@
     "X-Request-ID",
     "X-Response-Time",
     "http",
-    "header"
+    "header",
+    "json"
   ]
 }
