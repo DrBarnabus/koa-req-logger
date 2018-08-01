@@ -595,4 +595,35 @@ describe('Middleware', () => {
     server.close();
     done();
   });
+
+  test('Should respond with status 500 if a generic error is thrown', async done => {
+    // Setup
+    const app = new Koa();
+    const logger = new KoaReqLogger({
+      enabled: false
+    });
+    app.use(logger.getMiddleware());
+
+    app.use((ctx, next) => {
+      ctx.status = 200;
+      ctx.body = {
+        data: 'Hello World!'
+      };
+
+      throw new Error('Generic Error with no Status');
+    });
+
+    let server = app.listen();
+
+    // Test
+    const response = await request(server).get('/');
+    expect(response.status).toEqual(500);
+    expect(response.body.error.code).toEqual(500);
+    expect(response.body.error.message).toEqual('Internal Server Error');
+    expect(response.type).toEqual('application/json');
+
+    // Teardown
+    server.close();
+    done();
+  });
 });
