@@ -9,7 +9,7 @@
     "lint": "eslint index.js lib test"
   },
   "dependencies": {
-    "pino": "^4.17.3",
+    "pino": "^5.0.1",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
