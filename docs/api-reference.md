@@ -18,10 +18,9 @@ Creates a new instance of the KoaReqLogger with the provided options.
 | [opts] | <code>Object</code> | A configuration option, can take any options that would usually be passed to [pino]. |
 | [opts].alwaysError | <code>Boolean</code> | Forces the logger to always use the error severity when an error is thrown regardless of response status. | <code>false</code> |
 | [opts].uuidFunction | <code>Function</code> | Allows you to override the default uuid generation function for the request id. Function should return the uuid as a string. | uuidv4 from [uuid].
-| [opts].headers | <code>Object\Boolean</code> | If set to false it will disable all headers being added to a request. Alternatively you can use the object to individually control the headers. |
-| [opts].headers.id | <code>Boolean</code> | If set to false, it will disable the X-Request-ID Header. | <code>true</code> |
-| [opts].headers.date | <code>Boolean</code> | If set to false, it will disable the Date Header. | <code>true</code> |
-| [opts].headers.responseTime | <code>Boolean</code> | If set to false, it will disable the X-Response-Time Header. | <code>true</code> |
+| [opts].idHeader | <code>Boolean</code> | If set to false, it will disable the X-Request-ID Header. | <code>true</code> |
+| [opts].dateHeader | <code>Boolean</code> | If set to false, it will disable the Date Header. | <code>true</code> |
+| [opts].responseTimeHeader | <code>Boolean</code> | If set to false, it will disable the X-Response-Time Header. | <code>true</code> |
 
 **Pino Options:**
 
@@ -34,9 +33,7 @@ The options object is then passed directly to pino, and you can see their docume
 ```js
 const logger = new KoaReqLogger({
   alwaysError: true,
-  headers: {
-    date: false
-  },
+  dateHeader: false,
   uuidFunction: () => {
     return 'uuid-as-string';
   },
