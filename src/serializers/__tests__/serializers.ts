@@ -1,18 +1,14 @@
-'use strict';
-
-const reqSerializer = require('../lib/req');
-const resSerializer = require('../lib/res');
-const errSerializer = require('../lib/err');
+import { errSerializer, reqSerializer, resSerializer } from '../';
 
 describe('Serializers', () => {
   describe('reqSerializer', () => {
     test('Should serialize a standard req object', () => {
       const req = {
+        headers: ['headers', 'array'],
         id: 'id',
+        ip: '127.0.0.1',
         method: 'method',
         url: '/url',
-        headers: ['headers', 'array'],
-        ip: '127.0.0.1'
       };
 
       const serialized = reqSerializer(req);
@@ -21,12 +17,12 @@ describe('Serializers', () => {
     });
     test('Should serialize a non-standard req object, and remove all unwanted members', () => {
       const req = {
-        id: 'id',
-        method: 'method',
-        url: '/url',
         headers: ['headers', 'array'],
+        id: 'id',
         ip: '127.0.0.1',
-        nonStandard: 'method'
+        method: 'method',
+        nonStandard: 'method',
+        url: '/url',
       };
 
       const serialized = reqSerializer(req);
@@ -40,8 +36,8 @@ describe('Serializers', () => {
   describe('resSerializer', () => {
     test('Should serialize a standard res object', () => {
       const res = {
-        status: 200,
-        headers: ['header', 'array']
+        headers: ['header', 'array'],
+        status: 200
       };
 
       const serialized = resSerializer(res);
@@ -51,9 +47,9 @@ describe('Serializers', () => {
 
     test('Should serialize a non-standard res object, and remove all unwanted members', () => {
       const res = {
-        status: 200,
         headers: ['header', 'array'],
-        nonStandard: 'member'
+        nonStandard: 'member',
+        status: 200
       };
 
       const serialized = resSerializer(res);
@@ -67,9 +63,9 @@ describe('Serializers', () => {
   describe('errSerializer', () => {
     test('Should serialize a standard err object', () => {
       const err = {
-        type: 'Error Name',
         message: 'Error Message',
-        stack: 'Error Stack'
+        stack: 'Error Stack',
+        type: 'Error Name'
       };
 
       const serialized = errSerializer(err);
@@ -80,10 +76,10 @@ describe('Serializers', () => {
 
     test('Should serialize a non-standard err object, retaining all non-standard members', () => {
       const err = {
-        type: 'Error Name',
         message: 'Error Message',
+        nonStandard: 'member',
         stack: 'Error Stack',
-        nonStandard: 'member'
+        type: 'Error Name'
       };
 
       const serialized = errSerializer(err);
