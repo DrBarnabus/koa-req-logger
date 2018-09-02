@@ -29,7 +29,7 @@ let reqProto = Object.create(
   }
 );
 
-function reqSerializer(req) {
+export function reqSerializer(req: any) {
   const _req = Object.create(reqProto);
 
   _req.id = req.id;
@@ -40,5 +40,3 @@ function reqSerializer(req) {
 
   return _req;
 }
-
-module.exports = reqSerializer;

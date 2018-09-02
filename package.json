@@ -13,6 +13,10 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "@types/jest": "^23.3.1",
+    "@types/koa": "^2.0.46",
+    "@types/pino": "^5.20.0",
+    "@types/uuid": "^3.4.4",
     "eslint": "^5.2.0",
     "eslint-config-koa": "^2.0.2",
     "eslint-config-standard": "^11.0.0",
@@ -23,7 +27,9 @@
     "http-errors": "^1.6.3",
     "jest": "^23.4.1",
     "koa": "^2.5.2",
-    "supertest": "^3.1.0"
+    "supertest": "^3.1.0",
+    "ts-jest": "^23.1.4",
+    "typescript": "^3.0.3"
   },
   "jest": {
     "testMatch": [

@@ -1,6 +1,6 @@
 
-function errSerializer(err) {
-  let obj = {
+export function errSerializer(err: any) {
+  let obj: any = {
     type: err.constructor.name,
     message: err.message,
     stack: err.stack
@@ -14,5 +14,3 @@ function errSerializer(err) {
 
   return obj;
 };
-
-module.exports = errSerializer;

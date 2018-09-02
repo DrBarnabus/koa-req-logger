@@ -12,7 +12,7 @@ let resProto = Object.create({}, {
   }
 });
 
-function resSerializer(res) {
+export function resSerializer(res: any) {
   const _res = Object.create(resProto);
 
   _res.status = res.status;
@@ -20,5 +20,3 @@ function resSerializer(res) {
 
   return _res;
 }
-
-module.exports = resSerializer;

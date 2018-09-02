@@ -1,14 +1,64 @@
-const pino = require('pino');
-const uuidv4 = require('uuid/v4');
+import * as pino from 'pino';
+import * as uuidv4 from 'uuid/v4';
+import { Context } from 'koa';
+import { errSerializer, reqSerializer, resSerializer } from './serializers';
 
-// Set of standard serializers
-const stdSerializers = {
-  req: require('./lib/req'),
-  res: require('./lib/res'),
-  err: require('./lib/err')
-};
+declare module 'koa' {
+  interface Context {
+    id: string;
+    start: Date;
+    log: pino.Logger;
+    responseTime: number;
+  }
+}
 
-module.exports = class KoaReqLogger {
+interface Error {
+  status: number;
+  message: string;
+}
+
+interface HeaderOpts {
+  /**
+   * Disables the X-Request-ID header when sending the response.
+   */
+  id: boolean;
+
+  /**
+   * Disables the Date header when sending the response.
+   */
+  date: boolean;
+
+  /**
+   * Disables the X-Response-Time header when sending the response.
+   */
+  responseTime: boolean;
+}
+
+export interface KoaReqLoggerOptions extends pino.LoggerOptions {
+  /**
+   * Forces the logger to always use the error severity, regardless of the response status.
+   */
+  alwaysError?: boolean;
+
+  /**
+   * Allows you to provide the default uuid generation function for the request id. The function should return the uuid as a string.
+   */
+  uuidFunction: Function;
+
+  /**
+   * Allows you to disable the headers that are added to requests. Can either be set to false to disable all or an object to disable specific headers.
+   */
+  headers: boolean | HeaderOpts;
+}
+
+export class KoaReqLogger {
+  idHeader: boolean;
+  startHeader: boolean;
+  responseTimeHeader: boolean;
+  uuidFunction: Function;
+  alwaysError: boolean;
+  logger: pino.Logger;
+
   /**
    * A logging middleware for koa, this middleware also sets the HTTP Date header,
    * sets the X-Response-Time header to the response time in milliseconds and sets the
@@ -23,16 +73,16 @@ module.exports = class KoaReqLogger {
    * @param {object} opts An optional options object
    * @api public
    */
-  constructor(opts) {
+  constructor(opts: KoaReqLoggerOptions) {
     this.middleware = this.middleware.bind(this);
 
     opts = opts || {};
 
     // Set standard serializers, if no custom ones used
     opts.serializers = opts.serializers || {};
-    opts.serializers.req = opts.serializers.req || stdSerializers.req;
-    opts.serializers.res = opts.serializers.res || stdSerializers.res;
-    opts.serializers.err = opts.serializers.err || stdSerializers.err;
+    opts.serializers.req = opts.serializers.req || reqSerializer;
+    opts.serializers.res = opts.serializers.res || resSerializer;
+    opts.serializers.err = opts.serializers.err || errSerializer;
 
     // Check if all headers should be disabled
     if (typeof opts.headers === 'boolean') {
@@ -77,7 +127,7 @@ module.exports = class KoaReqLogger {
       this.uuidFunction = opts.uuidFunction;
       delete opts.uuidFunction;
     } else {
-      this.uuidFunction = uuidv4;
+      this.uuidFunction = uuidv4.default;
     }
 
     delete opts.uuidFunction;
@@ -86,7 +136,7 @@ module.exports = class KoaReqLogger {
 
     delete opts.alwaysError;
 
-    this.logger = pino(opts);
+    this.logger = pino.default(opts);
   }
 
   /**
@@ -96,7 +146,7 @@ module.exports = class KoaReqLogger {
    * @param ctx The current koa response context
    * @api private
    */
-  setRequestId(ctx) {
+  setRequestId(ctx: Context) {
     if (ctx.get('X-Request-ID')) {
       ctx.id = ctx.get('X-Request-ID');
     } else {
@@ -114,7 +164,7 @@ module.exports = class KoaReqLogger {
    * @param ctx The current koa context
    * @api private
    */
-  startRequest(ctx) {
+  startRequest(ctx: Context) {
     ctx.start = new Date();
 
     if (this.startHeader) {
@@ -131,9 +181,9 @@ module.exports = class KoaReqLogger {
    * @param ctx The current koa context
    * @api private
    */
-  setResponseTime(ctx) {
-    let now = new Date();
-    ctx.responseTime = now - ctx.start;
+  setResponseTime(ctx: Context) {
+    let now: Date = new Date();
+    ctx.responseTime = now.getTime() - ctx.start.getTime();
 
     if (this.responseTimeHeader) {
       ctx.set('X-Response-Time', `${ctx.responseTime}ms`);
@@ -146,7 +196,7 @@ module.exports = class KoaReqLogger {
    * @param ctx The current koa context
    * @api private
    */
-  endRequest(ctx) {
+  endRequest(ctx: Context) {
     this.setResponseTime(ctx);
 
     ctx.log.info(
@@ -161,7 +211,7 @@ module.exports = class KoaReqLogger {
    * @param ctx The current koa context
    * @api private
    */
-  endRequestError(e, ctx) {
+  endRequestError(e: Error, ctx: Context) {
     this.setResponseTime(ctx);
 
     // Construct error response
@@ -202,12 +252,12 @@ module.exports = class KoaReqLogger {
    * @param next The next function in the middleware stack
    * @api private
    */
-  async middleware(ctx, next) {
+  async middleware(ctx: Context, next: Function) {
     // Set the request id
     this.setRequestId(ctx);
 
     // Create a child of the logger with the request id as the key
-    ctx.log = ctx.logger = ctx.req.log = ctx.request.log = ctx.res.log = this.logger.child({ id: ctx.id });
+    ctx.log = this.logger.child({ id: ctx.id });
 
     // Start the request logging
     this.startRequest(ctx);
