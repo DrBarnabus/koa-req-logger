@@ -4,9 +4,9 @@
   "description": "A koa logging middleware, logs requests and errors. Also adds date and x-response-time to response headers.",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "test": "jest",
-    "test-cov": "jest --coverage --runInBand",
-    "lint": "eslint index.js lib test"
+    "lint": "tslint -c tslint.json 'src/**/*.ts'"
   },
   "dependencies": {
     "pino": "^5.0.1",
@@ -29,6 +29,7 @@
     "koa": "^2.5.2",
     "supertest": "^3.1.0",
     "ts-jest": "^23.1.4",
+    "tslint": "^5.11.0",
     "typescript": "^3.0.3"
   },
   "jest": {
@@ -40,7 +41,8 @@
       "lcov"
     ],
     "bail": true,
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "coverage": true
   },
   "repository": "github:DrBarnabus/koa-req-logger",
   "author": "DrBarnabus <drbarnabus@drbarnabus.com> (https://drbarnabus.com)",

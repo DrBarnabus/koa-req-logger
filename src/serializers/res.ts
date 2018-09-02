@@ -1,22 +1,22 @@
 
-let resProto = Object.create({}, {
-  status: {
-    enumerable: true,
-    writable: true,
-    value: 0
-  },
+const resProto = Object.create({}, {
   headers: {
     enumerable: true,
-    writable: true,
-    value: {}
+    value: {},
+    writable: true
+  },
+  status: {
+    enumerable: true,
+    value: 0,
+    writable: true
   }
 });
 
 export function resSerializer(res: any) {
-  const _res = Object.create(resProto);
+  const sRes = Object.create(resProto);
 
-  _res.status = res.status;
-  _res.headers = res.headers;
+  sRes.status = res.status;
+  sRes.headers = res.headers;
 
-  return _res;
+  return sRes;
 }

@@ -1,6 +1,6 @@
+import { Context } from 'koa';
 import * as pino from 'pino';
 import * as uuidv4 from 'uuid/v4';
-import { Context } from 'koa';
 import { errSerializer, reqSerializer, resSerializer } from './serializers';
 
 declare module 'koa' {
@@ -34,6 +34,8 @@ interface HeaderOpts {
   responseTime: boolean;
 }
 
+type RequestIdFunction = () => string;
+
 export interface KoaReqLoggerOptions extends pino.LoggerOptions {
   /**
    * Forces the logger to always use the error severity, regardless of the response status.
@@ -41,23 +43,25 @@ export interface KoaReqLoggerOptions extends pino.LoggerOptions {
   alwaysError?: boolean;
 
   /**
-   * Allows you to provide the default uuid generation function for the request id. The function should return the uuid as a string.
+   * Allows you to provide the default uuid generation function for the request id.
+   * The function should return the uuid as a string.
    */
-  uuidFunction: Function;
+  uuidFunction: RequestIdFunction;
 
   /**
-   * Allows you to disable the headers that are added to requests. Can either be set to false to disable all or an object to disable specific headers.
+   * Allows you to disable the headers that are added to requests.
+   * Can either be set to false to disable all or an object to disable specific headers.
    */
   headers: boolean | HeaderOpts;
 }
 
 export class KoaReqLogger {
-  idHeader: boolean;
-  startHeader: boolean;
-  responseTimeHeader: boolean;
-  uuidFunction: Function;
-  alwaysError: boolean;
-  logger: pino.Logger;
+  private idHeader: boolean;
+  private startHeader: boolean;
+  private responseTimeHeader: boolean;
+  private uuidFunction: RequestIdFunction;
+  private alwaysError: boolean;
+  private logger: pino.Logger;
 
   /**
    * A logging middleware for koa, this middleware also sets the HTTP Date header,
@@ -140,13 +144,21 @@ export class KoaReqLogger {
   }
 
   /**
+   * This function returns the middleware function for use in koa
+   * @api public
+   */
+  public getMiddleware() {
+    return this.middleware;
+  }
+
+  /**
    * This function takes a request context and assigns a request id
    * This will either be a newly generated uuidv4 or the X-Request-ID header passed into the request
    * The resulting request id is then set as the X-Request-ID header on the response
    * @param ctx The current koa response context
    * @api private
    */
-  setRequestId(ctx: Context) {
+  private setRequestId(ctx: Context) {
     if (ctx.get('X-Request-ID')) {
       ctx.id = ctx.get('X-Request-ID');
     } else {
@@ -164,7 +176,7 @@ export class KoaReqLogger {
    * @param ctx The current koa context
    * @api private
    */
-  startRequest(ctx: Context) {
+  private startRequest(ctx: Context) {
     ctx.start = new Date();
 
     if (this.startHeader) {
@@ -181,8 +193,8 @@ export class KoaReqLogger {
    * @param ctx The current koa context
    * @api private
    */
-  setResponseTime(ctx: Context) {
-    let now: Date = new Date();
+  private setResponseTime(ctx: Context) {
+    const now: Date = new Date();
     ctx.responseTime = now.getTime() - ctx.start.getTime();
 
     if (this.responseTimeHeader) {
@@ -196,7 +208,7 @@ export class KoaReqLogger {
    * @param ctx The current koa context
    * @api private
    */
-  endRequest(ctx: Context) {
+  private endRequest(ctx: Context) {
     this.setResponseTime(ctx);
 
     ctx.log.info(
@@ -211,7 +223,7 @@ export class KoaReqLogger {
    * @param ctx The current koa context
    * @api private
    */
-  endRequestError(e: Error, ctx: Context) {
+  private endRequestError(e: Error, ctx: Context) {
     this.setResponseTime(ctx);
 
     // Construct error response
@@ -233,6 +245,7 @@ export class KoaReqLogger {
       };
     }
 
+    // tslint:disable-next-line:no-bitwise
     if (((ctx.status / 100) | 0) == 5 || this.alwaysError) {
       ctx.log.error(
         { res: ctx.response, err: e, responseTime: ctx.responseTime, startDate: ctx.start.toUTCString() },
@@ -252,7 +265,7 @@ export class KoaReqLogger {
    * @param next The next function in the middleware stack
    * @api private
    */
-  async middleware(ctx: Context, next: Function) {
+  private async middleware(ctx: Context, next: any) {
     // Set the request id
     this.setRequestId(ctx);
 
@@ -273,11 +286,4 @@ export class KoaReqLogger {
     }
   }
 
-  /**
-   * This function returns the middleware function for use in koa
-   * @api public
-   */
-  getMiddleware() {
-    return this.middleware;
-  }
-};
+}

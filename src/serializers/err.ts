@@ -1,16 +1,16 @@
 
 export function errSerializer(err: any) {
-  let obj: any = {
-    type: err.constructor.name,
+  const obj: any = {
     message: err.message,
-    stack: err.stack
+    stack: err.stack,
+    type: err.constructor.name
   };
 
-  for (let key in err) {
+  for (const key in err) {
     if (obj[key] === undefined) {
       obj[key] = err[key];
     }
   }
 
   return obj;
-};
+}

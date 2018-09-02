@@ -1,42 +1,42 @@
-let reqProto = Object.create(
+const reqProto = Object.create(
   {},
   {
-    id: {
-      enumerable: true,
-      writable: true,
-      value: ''
-    },
-    method: {
-      enumerable: true,
-      writable: true,
-      value: ''
-    },
-    url: {
-      enumerable: true,
-      writable: true,
-      value: ''
-    },
     headers: {
       enumerable: true,
-      writable: true,
-      value: {}
+      value: {},
+      writable: true
+    },
+    id: {
+      enumerable: true,
+      value: '',
+      writable: true
     },
     ip: {
       enumerable: true,
-      writable: true,
-      value: ''
+      value: '',
+      writable: true
+    },
+    method: {
+      enumerable: true,
+      value: '',
+      writable: true
+    },
+    url: {
+      enumerable: true,
+      value: '',
+      writable: true
     }
   }
 );
 
 export function reqSerializer(req: any) {
-  const _req = Object.create(reqProto);
+  const sReq = Object.create(reqProto);
 
-  _req.id = req.id;
-  _req.method = req.method;
-  _req.url = req.url;
-  _req.headers = req.headers;
-  _req.ip = req.ip;
+  sReq.id = req.id;
+  sReq.method = req.method;
+  sReq.url = req.url;
+  sReq.headers = req.headers;
+  sReq.ip = req.ip;
 
-  return _req;
+  return sReq;
 }
