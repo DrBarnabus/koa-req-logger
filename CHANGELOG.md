@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- Added a TypeScript type declaration file so that the module can be more easily used in a typescript project.
+### Changed
+- Updated package dependencies.
+- **Breaking Change** to disable specific headers or all headers, you are now required to set idHeader, dateHeader and responseTimeHeader respectively. To disable all headers all three options must be set.
+
 ## [1.2.2] - 2018-08-08
 ### Changed
 - Updated package dependencies to use the latest version of pino v5.0.1 as a minimum.
@@ -39,6 +46,7 @@ First release of the package.
 
 
 <!-- LINKS --->
+[Unreleased]: https://github.com/DrBarnabus/koa-req-logger/compare/master...ts-conversion
 [1.2.2]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.1.0...v1.2.0
