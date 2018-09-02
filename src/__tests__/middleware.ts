@@ -1,8 +1,7 @@
-'use strict';
-
-const request = require('supertest');
-const Koa = require('koa');
-const KoaReqLogger = require('../');
+import Koa from 'koa';
+import { Context, Middleware } from 'koa';
+import request from 'supertest';
+import { KoaReqLogger, KoaReqLoggerOptions } from '../';
 
 describe('Middleware', () => {
   test('getMiddleware() should return a function', () => {
@@ -10,7 +9,7 @@ describe('Middleware', () => {
     expect(typeof logger.getMiddleware()).toEqual('function');
   });
 
-  test('Response should include HTTP Date header', async done => {
+  test('Response should include HTTP Date header', async (done) => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -18,28 +17,28 @@ describe('Middleware', () => {
     });
     app.use(logger.getMiddleware());
 
-    app.use((ctx, next) => {
+    app.use((ctx: Context, next: Middleware) => {
       ctx.status = 200;
       ctx.body = {
         data: 'Hello World!'
       };
     });
 
-    let server = app.listen();
+    const server = app.listen();
 
     // Test
     const response = await request(server).get('/');
     expect(response.status).toEqual(200);
     expect(response.type).toEqual('application/json');
     expect(response.body.data).toEqual('Hello World!');
-    expect(response.headers['date']).toBeDefined();
+    expect(response.header.date).toBeDefined();
 
     // Teardown
     server.close();
     done();
   });
 
-  test('Response should include HTTP X-Response-Time header', async done => {
+  test('Response should include HTTP X-Response-Time header', async (done) => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -47,28 +46,28 @@ describe('Middleware', () => {
     });
     app.use(logger.getMiddleware());
 
-    app.use((ctx, next) => {
+    app.use((ctx: any, next: any) => {
       ctx.status = 200;
       ctx.body = {
         data: 'Hello World!'
       };
     });
 
-    let server = app.listen();
+    const server = app.listen();
 
     // Test
     const response = await request(server).get('/');
     expect(response.status).toEqual(200);
     expect(response.type).toEqual('application/json');
     expect(response.body.data).toEqual('Hello World!');
-    expect(response.headers['x-response-time']).toBeDefined();
+    expect(response.header['x-response-time']).toBeDefined();
 
     // Teardown
     server.close();
     done();
   });
 
-  test('Response should include HTTP X-Request-ID header', async done => {
+  test('Response should include HTTP X-Request-ID header', async (done) => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -83,21 +82,22 @@ describe('Middleware', () => {
       };
     });
 
-    let server = app.listen();
+    const server = app.listen();
 
     // Test
     const response = await request(server).get('/');
     expect(response.status).toEqual(200);
     expect(response.type).toEqual('application/json');
     expect(response.body.data).toEqual('Hello World!');
-    expect(response.headers['x-request-id']).toBeDefined();
+    expect(response.header['x-request-id']).toBeDefined();
 
     // Teardown
     server.close();
     done();
   });
 
-  test('When a X-Request-ID is provided in the request, the same value should be sent back as the HTTP X-Request-ID header', async done => {
+  test(`When a X-Request-ID is provided in the request,
+    the same value should be sent back as the HTTP X-Request-ID header`, async (done) => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -112,7 +112,7 @@ describe('Middleware', () => {
       };
     });
 
-    let server = app.listen();
+    const server = app.listen();
 
     // Test
     const response = await request(server)
@@ -121,48 +121,48 @@ describe('Middleware', () => {
     expect(response.status).toEqual(200);
     expect(response.type).toEqual('application/json');
     expect(response.body.data).toEqual('Hello World!');
-    expect(response.headers['x-request-id']).toBeDefined();
-    expect(response.headers['x-request-id']).toEqual('test-value');
+    expect(response.header['x-request-id']).toBeDefined();
+    expect(response.header['x-request-id']).toEqual('test-value');
 
     // Teardown
     server.close();
     done();
   });
 
-  test('Should use custom uuid function if provided, and return the correct value', async done => {
+  test('Should use custom uuid function if provided, and return the correct value', async (done) => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
+      enabled: false,
       uuidFunction: () => {
         return 'test-uuid';
-      },
-      enabled: false
+      }
     });
     app.use(logger.getMiddleware());
 
-    app.use((ctx, next) => {
+    app.use((ctx: any, next: any) => {
       ctx.status = 200;
       ctx.body = {
         data: 'Hello World!'
       };
     });
 
-    let server = app.listen();
+    const server = app.listen();
 
     // Test
     const response = await request(server).get('/');
     expect(response.status).toEqual(200);
     expect(response.type).toEqual('application/json');
     expect(response.body.data).toEqual('Hello World!');
-    expect(response.headers['x-request-id']).toBeDefined();
-    expect(response.headers['x-request-id']).toEqual('test-uuid');
+    expect(response.header['x-request-id']).toBeDefined();
+    expect(response.header['x-request-id']).toEqual('test-uuid');
 
     // Teardown
     server.close();
     done();
   });
 
-  test('Should return the correct HTTP Status Code if an error is thrown', async done => {
+  test('Should return the correct HTTP Status Code if an error is thrown', async (done) => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -180,7 +180,7 @@ describe('Middleware', () => {
       ctx.throw(400, 'Bad Request');
     });
 
-    let server = app.listen();
+    const server = app.listen();
 
     // Test
     const response = await request(server).get('/');
@@ -192,7 +192,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should return an error object if an error is thrown in a request handler', async done => {
+  test('Should return an error object if an error is thrown in a request handler', async (done) => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -210,7 +210,7 @@ describe('Middleware', () => {
       ctx.throw(500, 'Internal Server Error');
     });
 
-    let server = app.listen();
+    const server = app.listen();
 
     // Test
     const response = await request(server).get('/');
@@ -223,7 +223,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should return an error object, with the correct error code if an error is thrown', async done => {
+  test('Should return an error object, with the correct error code if an error is thrown', async (done) => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -241,7 +241,7 @@ describe('Middleware', () => {
       ctx.throw(400, 'Bad Request');
     });
 
-    let server = app.listen();
+    const server = app.listen();
 
     // Test
     const response = await request(server).get('/');
@@ -255,7 +255,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should return an error object, with the correct error message if an error is thrown', async done => {
+  test('Should return an error object, with the correct error message if an error is thrown', async (done) => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -273,7 +273,7 @@ describe('Middleware', () => {
       ctx.throw(400, 'Bad Request');
     });
 
-    let server = app.listen();
+    const server = app.listen();
 
     // Test
     const response = await request(server).get('/');
@@ -287,7 +287,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should not return the rest of the response body on error', async done => {
+  test('Should not return the rest of the response body on error', async (done) => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -305,7 +305,7 @@ describe('Middleware', () => {
       ctx.throw(400, 'Bad Request');
     });
 
-    let server = app.listen();
+    const server = app.listen();
 
     // Test
     const response = await request(server).get('/');
@@ -318,13 +318,40 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should ignore the X-Request-ID HTTP Header if disabled in the options', async done => {
+  test('Should ignore the X-Request-ID HTTP Header if disabled in the options', async (done) => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      headers: {
-        id: false
-      },
+      enabled: false,
+      idHeader: false
+    });
+    app.use(logger.getMiddleware());
+
+    app.use((ctx, next) => {
+      ctx.status = 200;
+      ctx.body = {
+        data: 'Hello World!'
+      };
+    });
+
+    const server = app.listen();
+
+    // Test
+    const response = await request(server).get('/');
+    expect(response.status).toEqual(200);
+    expect(response.type).toEqual('application/json');
+    expect(response.header['x-request-id']).toBeUndefined();
+
+    // Teardown
+    server.close();
+    done();
+  });
+
+  test('Should ignore the Date HTTP Header if disabled in the options', async (done) => {
+    // Setup
+    const app = new Koa();
+    const logger = new KoaReqLogger({
+      dateHeader: false,
       enabled: false
     });
     app.use(logger.getMiddleware());
@@ -336,26 +363,82 @@ describe('Middleware', () => {
       };
     });
 
-    let server = app.listen();
+    const server = app.listen();
 
     // Test
     const response = await request(server).get('/');
     expect(response.status).toEqual(200);
     expect(response.type).toEqual('application/json');
-    expect(response.headers['x-request-id']).toBeUndefined();
+    expect(response.header.date).toBeUndefined();
 
     // Teardown
     server.close();
     done();
   });
 
-  test('Should ignore the Date HTTP Header if disabled in the options', async done => {
+  test('Should ignore the X-Response-Time HTTP Header if disabled in the options', async (done) => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      headers: {
-        date: false
-      },
+      enabled: false,
+      responseTimeHeader: false
+    });
+    app.use(logger.getMiddleware());
+
+    app.use((ctx, next) => {
+      ctx.status = 200;
+      ctx.body = {
+        data: 'Hello World!'
+      };
+    });
+
+    const server = app.listen();
+
+    // Test
+    const response = await request(server).get('/');
+    expect(response.status).toEqual(200);
+    expect(response.type).toEqual('application/json');
+    expect(response.header['x-response-time']).toBeUndefined();
+
+    // Teardown
+    server.close();
+    done();
+  });
+
+  test('Should not ignore the X-Request-ID HTTP Header if enabled in the options', async (done) => {
+    // Setup
+    const app = new Koa();
+    const logger = new KoaReqLogger({
+      enabled: false,
+      idHeader: true
+    });
+    app.use(logger.getMiddleware());
+
+    app.use((ctx, next) => {
+      ctx.status = 200;
+      ctx.body = {
+        data: 'Hello World!'
+      };
+    });
+
+    const server = app.listen();
+
+    // Test
+    const response = await request(server).get('/');
+    expect(response.status).toEqual(200);
+    expect(response.type).toEqual('application/json');
+    expect(response.header['x-request-id']).toBeDefined();
+
+    // Teardown
+    server.close();
+    done();
+  });
+
+  test('Should not ignore the Date HTTP Header if enabled in the options', async (done) => {
+    // Setup
+    const app = new Koa();
+    const logger = new KoaReqLogger({
+      dateHeader: true,
       enabled: false
     });
     app.use(logger.getMiddleware());
@@ -367,26 +450,85 @@ describe('Middleware', () => {
       };
     });
 
-    let server = app.listen();
+    const server = app.listen();
 
     // Test
     const response = await request(server).get('/');
     expect(response.status).toEqual(200);
     expect(response.type).toEqual('application/json');
-    expect(response.headers['date']).toBeUndefined();
+    expect(response.header.date).toBeDefined();
 
     // Teardown
     server.close();
     done();
   });
 
-  test('Should ignore the X-Response-Time HTTP Header if disabled in the options', async done => {
+  test('Should not ignore the X-Response-Time HTTP Header if enabled in the options', async (done) => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      headers: {
-        responseTime: false
-      },
+      enabled: false,
+      responseTimeHeader: true
+    });
+    app.use(logger.getMiddleware());
+
+    app.use((ctx, next) => {
+      ctx.status = 200;
+      ctx.body = {
+        data: 'Hello World!'
+      };
+    });
+
+    const server = app.listen();
+
+    // Test
+    const response = await request(server).get('/');
+    expect(response.status).toEqual(200);
+    expect(response.type).toEqual('application/json');
+    expect(response.header['x-response-time']).toBeDefined();
+
+    // Teardown
+    server.close();
+    done();
+  });
+
+  test('Should respond with no headers, if all are disabled', async (done) => {
+    // Setup
+    const app = new Koa();
+    const logger = new KoaReqLogger({
+      dateHeader: false,
+      enabled: false,
+      idHeader: false,
+      responseTimeHeader: false
+    });
+    app.use(logger.getMiddleware());
+
+    app.use((ctx, next) => {
+      ctx.status = 200;
+      ctx.body = {
+        data: 'Hello World!'
+      };
+    });
+
+    const server = app.listen();
+
+    // Test
+    const response = await request(server).get('/');
+    expect(response.status).toEqual(200);
+    expect(response.type).toEqual('application/json');
+    expect(response.header['x-request-id']).toBeUndefined();
+    expect(response.header.date).toBeUndefined();
+    expect(response.header['x-response-time']).toBeUndefined();
+
+    // Teardown
+    server.close();
+    done();
+  });
+
+  test('Should respond with all headers, if all are enabled', async (done) => {
+    // Setup
+    const app = new Koa();
+    const logger = new KoaReqLogger({
       enabled: false
     });
     app.use(logger.getMiddleware());
@@ -398,175 +540,22 @@ describe('Middleware', () => {
       };
     });
 
-    let server = app.listen();
+    const server = app.listen();
 
     // Test
     const response = await request(server).get('/');
     expect(response.status).toEqual(200);
     expect(response.type).toEqual('application/json');
-    expect(response.headers['x-response-time']).toBeUndefined();
+    expect(response.header['x-request-id']).toBeDefined();
+    expect(response.header.date).toBeDefined();
+    expect(response.header['x-response-time']).toBeDefined();
 
     // Teardown
     server.close();
     done();
   });
 
-  test('Should ignore the X-Request-ID HTTP Header if enabled in the options', async done => {
-    // Setup
-    const app = new Koa();
-    const logger = new KoaReqLogger({
-      headers: {
-        id: true
-      },
-      enabled: false
-    });
-    app.use(logger.getMiddleware());
-
-    app.use((ctx, next) => {
-      ctx.status = 200;
-      ctx.body = {
-        data: 'Hello World!'
-      };
-    });
-
-    let server = app.listen();
-
-    // Test
-    const response = await request(server).get('/');
-    expect(response.status).toEqual(200);
-    expect(response.type).toEqual('application/json');
-    expect(response.headers['x-request-id']).toBeDefined();
-
-    // Teardown
-    server.close();
-    done();
-  });
-
-  test('Should ignore the Date HTTP Header if enabled in the options', async done => {
-    // Setup
-    const app = new Koa();
-    const logger = new KoaReqLogger({
-      headers: {
-        date: true
-      },
-      enabled: false
-    });
-    app.use(logger.getMiddleware());
-
-    app.use((ctx, next) => {
-      ctx.status = 200;
-      ctx.body = {
-        data: 'Hello World!'
-      };
-    });
-
-    let server = app.listen();
-
-    // Test
-    const response = await request(server).get('/');
-    expect(response.status).toEqual(200);
-    expect(response.type).toEqual('application/json');
-    expect(response.headers['date']).toBeDefined();
-
-    // Teardown
-    server.close();
-    done();
-  });
-
-  test('Should add the X-Response-Time HTTP Header if enabled in the options', async done => {
-    // Setup
-    const app = new Koa();
-    const logger = new KoaReqLogger({
-      headers: {
-        responseTime: true
-      },
-      enabled: false
-    });
-    app.use(logger.getMiddleware());
-
-    app.use((ctx, next) => {
-      ctx.status = 200;
-      ctx.body = {
-        data: 'Hello World!'
-      };
-    });
-
-    let server = app.listen();
-
-    // Test
-    const response = await request(server).get('/');
-    expect(response.status).toEqual(200);
-    expect(response.type).toEqual('application/json');
-    expect(response.headers['x-response-time']).toBeDefined();
-
-    // Teardown
-    server.close();
-    done();
-  });
-
-  test('Should respond with no headers, if all are disabled', async done => {
-    // Setup
-    const app = new Koa();
-    const logger = new KoaReqLogger({
-      headers: false,
-      enabled: false
-    });
-    app.use(logger.getMiddleware());
-
-    app.use((ctx, next) => {
-      ctx.status = 200;
-      ctx.body = {
-        data: 'Hello World!'
-      };
-    });
-
-    let server = app.listen();
-
-    // Test
-    const response = await request(server).get('/');
-    expect(response.status).toEqual(200);
-    expect(response.type).toEqual('application/json');
-    expect(response.headers['x-request-id']).toBeUndefined();
-    expect(response.headers['date']).toBeUndefined();
-    expect(response.headers['x-response-time']).toBeUndefined();
-
-    // Teardown
-    server.close();
-    done();
-  });
-
-  test('Should respond with all headers, if all are enabled', async done => {
-    // Setup
-    const app = new Koa();
-    const logger = new KoaReqLogger({
-      headers: true,
-      enabled: false
-    });
-    app.use(logger.getMiddleware());
-
-    app.use((ctx, next) => {
-      ctx.status = 200;
-      ctx.body = {
-        data: 'Hello World!'
-      };
-    });
-
-    let server = app.listen();
-
-    // Test
-    const response = await request(server).get('/');
-    expect(response.status).toEqual(200);
-    expect(response.type).toEqual('application/json');
-    expect(response.headers['x-request-id']).toBeDefined();
-    expect(response.headers['date']).toBeDefined();
-    expect(response.headers['x-response-time']).toBeDefined();
-
-    // Teardown
-    server.close();
-    done();
-  });
-
-  test('Should still respond correctly with alwaysError option set', async done => {
+  test('Should still respond correctly with alwaysError option set', async (done) => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -584,7 +573,7 @@ describe('Middleware', () => {
       ctx.throw(400, 'Bad Request');
     });
 
-    let server = app.listen();
+    const server = app.listen();
 
     // Test
     const response = await request(server).get('/');
@@ -596,7 +585,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should respond with status 500 if a generic error is thrown', async done => {
+  test('Should respond with status 500 if a generic error is thrown', async (done) => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -613,7 +602,7 @@ describe('Middleware', () => {
       throw new Error('Generic Error with no Status');
     });
 
-    let server = app.listen();
+    const server = app.listen();
 
     // Test
     const response = await request(server).get('/');

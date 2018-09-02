@@ -17,23 +17,6 @@ interface Error {
   message: string;
 }
 
-interface HeaderOpts {
-  /**
-   * Disables the X-Request-ID header when sending the response.
-   */
-  id: boolean;
-
-  /**
-   * Disables the Date header when sending the response.
-   */
-  date: boolean;
-
-  /**
-   * Disables the X-Response-Time header when sending the response.
-   */
-  responseTime: boolean;
-}
-
 type RequestIdFunction = () => string;
 
 export interface KoaReqLoggerOptions extends pino.LoggerOptions {
@@ -46,13 +29,23 @@ export interface KoaReqLoggerOptions extends pino.LoggerOptions {
    * Allows you to provide the default uuid generation function for the request id.
    * The function should return the uuid as a string.
    */
-  uuidFunction: RequestIdFunction;
+  uuidFunction?: RequestIdFunction;
 
   /**
-   * Allows you to disable the headers that are added to requests.
-   * Can either be set to false to disable all or an object to disable specific headers.
+   * Disables the X-Request-ID header.
    */
-  headers: boolean | HeaderOpts;
+  idHeader?: boolean;
+
+  /**
+   * Disables the Date header.
+   */
+
+   dateHeader?: boolean;
+
+   /**
+    * Disables the X-Response-Time header.
+    */
+   responseTimeHeader?: boolean;
 }
 
 export class KoaReqLogger {
@@ -77,10 +70,10 @@ export class KoaReqLogger {
    * @param {object} opts An optional options object
    * @api public
    */
-  constructor(opts: KoaReqLoggerOptions) {
+  constructor(options?: KoaReqLoggerOptions) {
     this.middleware = this.middleware.bind(this);
 
-    opts = opts || {};
+    const opts: KoaReqLoggerOptions = options || {};
 
     // Set standard serializers, if no custom ones used
     opts.serializers = opts.serializers || {};
@@ -88,43 +81,26 @@ export class KoaReqLogger {
     opts.serializers.res = opts.serializers.res || resSerializer;
     opts.serializers.err = opts.serializers.err || errSerializer;
 
-    // Check if all headers should be disabled
-    if (typeof opts.headers === 'boolean') {
-      if (opts.headers == true) {
-        this.idHeader = true;
-        this.startHeader = true;
-        this.responseTimeHeader = true;
-      } else {
-        this.idHeader = false;
-        this.startHeader = false;
-        this.responseTimeHeader = false;
-      }
+    // Check if X-Request-ID header has been disabled
+    if (opts.idHeader == false) {
+      this.idHeader = false;
     } else {
-      opts.headers = opts.headers || {};
-
-      // Check if X-Request-ID Header should be disabled
-      if (opts.headers.id !== undefined) {
-        this.idHeader = opts.headers.id;
-      } else {
-        this.idHeader = true;
-      }
-
-      // Check if Date Header should be disabled
-      if (opts.headers.date !== undefined) {
-        this.startHeader = opts.headers.date;
-      } else {
-        this.startHeader = true;
-      }
-
-      // Check if X-Response-Time should be disabled
-      if (opts.headers.responseTime !== undefined) {
-        this.responseTimeHeader = opts.headers.responseTime;
-      } else {
-        this.responseTimeHeader = true;
-      }
+      this.idHeader = true;
     }
 
-    delete opts.headers;
+    // Check if Date header has been disabled
+    if (opts.dateHeader == false) {
+      this.startHeader = false;
+    } else {
+      this.startHeader = true;
+    }
+
+    // Check if X-Response-Time header has been disabled
+    if (opts.responseTimeHeader == false) {
+      this.responseTimeHeader = false;
+    } else {
+      this.responseTimeHeader = true;
+    }
 
     // Check if a uuidFunction has been passed in options and use if available
     if (typeof opts.uuidFunction === 'function') {
