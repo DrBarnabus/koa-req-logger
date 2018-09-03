@@ -37,18 +37,18 @@ export interface KoaReqLoggerOptions extends pino.LoggerOptions {
   /**
    * Disables the X-Request-ID header.
    */
-  idHeader?: boolean;
+  disableIdHeader?: boolean;
 
   /**
    * Disables the Date header.
    */
 
-  dateHeader?: boolean;
+  disableDateHeader?: boolean;
 
   /**
    * Disables the X-Response-Time header.
    */
-  responseTimeHeader?: boolean;
+  disableResponseTimeHeader?: boolean;
 }
 
 /**
@@ -84,21 +84,21 @@ export class KoaReqLogger {
     opts.serializers.err = opts.serializers.err || errSerializer;
 
     // Check if X-Request-ID header has been disabled
-    if (opts.idHeader == false) {
+    if (opts.disableIdHeader == true) {
       this.idHeader = false;
     } else {
       this.idHeader = true;
     }
 
     // Check if Date header has been disabled
-    if (opts.dateHeader == false) {
+    if (opts.disableDateHeader == true) {
       this.startHeader = false;
     } else {
       this.startHeader = true;
     }
 
     // Check if X-Response-Time header has been disabled
-    if (opts.responseTimeHeader == false) {
+    if (opts.disableResponseTimeHeader == true) {
       this.responseTimeHeader = false;
     } else {
       this.responseTimeHeader = true;

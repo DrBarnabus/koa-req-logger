@@ -322,8 +322,8 @@ describe('Middleware', () => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      enabled: false,
-      idHeader: false
+      disableIdHeader: true,
+      enabled: false
     });
     app.use(logger.getMiddleware());
 
@@ -351,7 +351,7 @@ describe('Middleware', () => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      dateHeader: false,
+      disableDateHeader: true,
       enabled: false
     });
     app.use(logger.getMiddleware());
@@ -380,8 +380,8 @@ describe('Middleware', () => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      enabled: false,
-      responseTimeHeader: false
+      disableResponseTimeHeader: true,
+      enabled: false
     });
     app.use(logger.getMiddleware());
 
@@ -409,8 +409,8 @@ describe('Middleware', () => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      enabled: false,
-      idHeader: true
+      disableIdHeader: false,
+      enabled: false
     });
     app.use(logger.getMiddleware());
 
@@ -438,7 +438,7 @@ describe('Middleware', () => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      dateHeader: true,
+      disableDateHeader: false,
       enabled: false
     });
     app.use(logger.getMiddleware());
@@ -467,8 +467,8 @@ describe('Middleware', () => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      enabled: false,
-      responseTimeHeader: true
+      disableResponseTimeHeader: false,
+      enabled: false
     });
     app.use(logger.getMiddleware());
 
@@ -496,10 +496,10 @@ describe('Middleware', () => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      dateHeader: false,
-      enabled: false,
-      idHeader: false,
-      responseTimeHeader: false
+      disableDateHeader: true,
+      disableIdHeader: true,
+      disableResponseTimeHeader: true,
+      enabled: false
     });
     app.use(logger.getMiddleware());
 

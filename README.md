@@ -30,10 +30,33 @@ npm install koa-req-logger
 
 For a full API Reference see the documentation [here⇗](docs/api-reference.md).
 
+### TypeScript
+```ts
+import Koa from 'koa';
+import { KoaReqLogger, KoaReqLoggerOptions } from 'koa-req-logger';
+
+const opts: KoaReqLoggerOptions = {
+  idHeader: false;
+};
+
+const app = new Koa();
+const logger = new KoaReqLogger(opts);
+app.use(logger.getMiddleware());
+
+app.use((ctx, next) => {
+  ctx.log.info('Some Log Message');
+  ctx.log.warn({ obj: 'object' }, 'Log a message with an object');
+
+  ctx.throw(400, 'Bad Request');
+});
+
+app.listen();
+```
+
 ### JavaScript
 ```js
 const Koa = require('koa');
-const KoaReqLogger = require('koa-req-logger').KoaReqLogger;
+const { KoaReqLogger } = require('koa-req-logger');
 
 const app = new Koa();
 
@@ -48,25 +71,6 @@ app.use((ctx, next) => {
 });
 
 app.listen(3000);
-```
-
-### TypeScript
-```ts
-import Koa from 'koa';
-import KoaReqLogger from 'koa-req-logger';
-
-const app = new Koa();
-const logger = new KoaReqLogger();
-app.use(logger.getMiddleware());
-
-app.use((ctx, next) => {
-  ctx.log.info('Some Log Message');
-  ctx.log.warn({ obj: 'object' }, 'Log a message with an object');
-
-  ctx.throw(400, 'Bad Request');
-});
-
-app.listen();
 ```
 
 ### Output
