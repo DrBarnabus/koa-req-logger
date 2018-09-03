@@ -68,9 +68,9 @@ export class KoaReqLogger {
    * @param {boolean} options.alwaysError - Always use an error status regardless of HTTP error status.
    * @param {Function} options.uuidFunction - Overrides the default uuid generation function,
    * must be a user supplied function that returns a string.
-   * @param {boolean} options.idHeader - Disables the X-Request-ID header.
-   * @param {boolean} options.dateHeader - Disables the Date header.
-   * @param {boolean} options.responseTimeHeader - Disables the X-Response-Time header.
+   * @param {boolean} options.disableIdHeader - Disables the X-Request-ID header.
+   * @param {boolean} options.disableDateHeader - Disables the Date header.
+   * @param {boolean} options.disableResponseTimeHeader - Disables the X-Response-Time header.
    */
   constructor(options?: KoaReqLoggerOptions) {
     this.middleware = this.middleware.bind(this);
