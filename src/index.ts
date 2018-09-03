@@ -265,4 +265,5 @@ export class KoaReqLogger {
   }
 }
 
+export default KoaReqLogger;
 exports = KoaReqLogger;
