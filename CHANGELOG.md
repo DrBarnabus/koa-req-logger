@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.2] - 2018-09-03
+### Fixed
+- Added default export so that the module works correctly in JavaScript projects.
+
 ## [1.3.1] - 2018-09-03
 ### Fixed
 - Fixed npmignore to include build JavaScript files.
@@ -52,6 +56,7 @@ First release of the package.
 
 
 <!-- LINKS --->
+[1.3.2]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.2.2...v1.3.0
 [1.2.2]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.2.1...v1.2.2
