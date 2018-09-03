@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file. This projec
 - Added a TypeScript type declaration file so that the module can be more easily used in a typescript project.
 ### Changed
 - Updated package dependencies.
+- Updated README.md with examples of usage in TypeScript.
+- Updated API Reference documentation.
 - **Breaking Change** to disable specific headers or all headers, you are now required to set idHeader, dateHeader and responseTimeHeader respectively. To disable all headers all three options must be set.
 
 ## [1.2.2] - 2018-08-08

@@ -7,23 +7,22 @@
 [![devDependencies][devDependencies-badge]][devDependencies-url]
 [![Known Vulnerabilities][snyk-badge]][snyk-url]
 
-A simple logging middleware for the [koa] http framework for nodejs. This module uses the [pino] logger and was inspired by the [koa-pino-logger] module.
+A simple logging middleware for the [koa] http framework for nodejs. This module uses the [pino] logger and was inspired by the [koa-pino-logger] module. This module was created with typescript, and is compatible with both javascript and typescript projects.
 
 As well as logging requests and providing a log object in requests, this module also sets the HTTP Headers Date, X-Response-Time and X-Request-ID.
-
-- The X-Request-ID HTTP Header is either set to a new uuid or the value of the X-Request-ID passed in the request so that requests can be tracked through multiple services.
-- The Date HTTP Header is set to the date that the request was recieved with the API.
-- The X-Response-Time HTTP Header is set as the response time in milliseconds.
+- **X-Request-ID** Header is set to a new uuid or the value of the X-Request-ID header sent with the request. This allows requests to be tracked through microservices.
+- **Date** Header is set to the date and time that the request was received.
+- **X-Response-Time** Header is set to the response time of the request in milliseconds.
 
 ## Contents
 - [Install](#Install)
 - [Usage](#Usage)
-- [Caveats](#Caveats)
 - [Test](#Test)
 - [License](#License)
 
 # Install
 ```
+yarn add koa-req-logger
 npm install koa-req-logger
 ```
 
@@ -31,6 +30,7 @@ npm install koa-req-logger
 
 For a full API Reference see the documentation [here⇗](docs/api-reference.md).
 
+### JavaScript
 ```js
 const Koa = require('koa');
 const KoaReqLogger = require('koa-req-logger');
@@ -50,6 +50,26 @@ app.use((ctx, next) => {
 app.listen(3000);
 ```
 
+### TypeScript
+```ts
+import Koa from 'koa';
+import KoaReqLogger from 'koa-req-logger';
+
+const app = new Koa();
+const logger = new KoaReqLogger();
+app.use(logger.getMiddleware());
+
+app.use((ctx, next) => {
+  ctx.log.info('Some Log Message');
+  ctx.log.warn({ obj: 'object' }, 'Log a message with an object');
+
+  ctx.throw(400, 'Bad Request');
+});
+
+app.listen();
+```
+
+### Output
 Produces a similar output to the following json, which can then be parsed with pino's shell utility to pretty-print the output.
 
 ```json
@@ -59,12 +79,9 @@ Produces a similar output to the following json, which can then be parsed with p
 {"level":50,"time":1532251116583,"msg":"::1 - GET / - 400 4ms","pid":4992,"hostname":"server.local","id":"ff0bae4b-b067-4cd6-8b99-5d221e74c515","res":{"status":400,"headers":{"x-request-id":"ff0bae4b-b067-4cd6-8b99-5d221e74c515","date":"Sun, 22 Jul 2018 09:18:36 GMT","x-response-time":"4ms","content-type":"application/json; charset=utf-8"}},"err":{"type":"ClientError","message":"Bad Request","stack":"BadRequestError: Bad Request\n    at Object.throw (/home/drbarnabus/Development/test-service/node_modules/koa/lib/context.js:96:11)...","status":400,"statusCode":400,"expose":true},"responseTime":4,"startDate":"Sun, 22 Jul 2018 09:18:36 GMT","v":1}
 ```
 
-# Caveats
-## koa-router allowedMethods()
-When using the [koa-router] allowedMethods middleware, the response errors are not caught by the error logger and are instead logged as successful requests. In most applications this is fine, but in the instance that you want these failures to be logged as errors you need to log these as errors follow the instructions [here⇗](docs/koa-router-allowedMethods-fix.md).
-
 # Test
 ```
+yarn test
 npm test
 ```
 
