@@ -19,6 +19,9 @@ interface Error {
 
 type RequestIdFunction = () => string;
 
+/**
+ * Represents the available options for KoaRequestLogger.
+ */
 export interface KoaReqLoggerOptions extends pino.LoggerOptions {
   /**
    * Forces the logger to always use the error severity, regardless of the response status.
@@ -48,6 +51,9 @@ export interface KoaReqLoggerOptions extends pino.LoggerOptions {
   responseTimeHeader?: boolean;
 }
 
+/**
+ * @class KoaReqLogger
+ */
 export class KoaReqLogger {
   private idHeader: boolean;
   private startHeader: boolean;
@@ -57,18 +63,14 @@ export class KoaReqLogger {
   private logger: pino.Logger;
 
   /**
-   * A logging middleware for koa, this middleware also sets the HTTP Date header,
-   * sets the X-Response-Time header to the response time in milliseconds and sets the
-   * X-Request-ID header to either a new uuidv4 or the request id passed into the request
-   * @example
-   * ``` javascript
-   * const app = Koa();
-   * const logger = KoaReqLogger();
-   * app.use(logger.getMiddleware());
-   * app.listen(3000);
-   * ```
-   * @param {object} opts An optional options object
-   * @api public
+   * Create a new instance of KoaReqLogger to use in a Koa App.
+   * @param options - A set of options to configure KoaReqLogger and Pino.
+   * @param {boolean} options.alwaysError - Always use an error status regardless of HTTP error status.
+   * @param {Function} options.uuidFunction - Overrides the default uuid generation function,
+   * must be a user supplied function that returns a string.
+   * @param {boolean} options.idHeader - Disables the X-Request-ID header.
+   * @param {boolean} options.dateHeader - Disables the Date header.
+   * @param {boolean} options.responseTimeHeader - Disables the X-Response-Time header.
    */
   constructor(options?: KoaReqLoggerOptions) {
     this.middleware = this.middleware.bind(this);
