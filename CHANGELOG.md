@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.3.0] - 2018-09-03
 ### Added
 - Added a TypeScript type declaration file so that the module can be more easily used in a typescript project.
 ### Changed
@@ -48,7 +48,7 @@ First release of the package.
 
 
 <!-- LINKS --->
-[Unreleased]: https://github.com/DrBarnabus/koa-req-logger/compare/master...ts-conversion
+[1.3.0]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.2.2...v1.3.0
 [1.2.2]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.1.0...v1.2.0
