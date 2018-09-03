@@ -9,7 +9,7 @@ describe('Middleware', () => {
     expect(typeof logger.getMiddleware()).toEqual('function');
   });
 
-  test('Response should include HTTP Date header', async (done) => {
+  test('Response should include HTTP Date header', async done => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -38,7 +38,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Response should include HTTP X-Response-Time header', async (done) => {
+  test('Response should include HTTP X-Response-Time header', async done => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -67,7 +67,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Response should include HTTP X-Request-ID header', async (done) => {
+  test('Response should include HTTP X-Request-ID header', async done => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -97,7 +97,7 @@ describe('Middleware', () => {
   });
 
   test(`When a X-Request-ID is provided in the request,
-    the same value should be sent back as the HTTP X-Request-ID header`, async (done) => {
+    the same value should be sent back as the HTTP X-Request-ID header`, async done => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -129,7 +129,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should use custom uuid function if provided, and return the correct value', async (done) => {
+  test('Should use custom uuid function if provided, and return the correct value', async done => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -162,7 +162,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should return the correct HTTP Status Code if an error is thrown', async (done) => {
+  test('Should return the correct HTTP Status Code if an error is thrown', async done => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -192,7 +192,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should return an error object if an error is thrown in a request handler', async (done) => {
+  test('Should return an error object if an error is thrown in a request handler', async done => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -223,7 +223,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should return an error object, with the correct error code if an error is thrown', async (done) => {
+  test('Should return an error object, with the correct error code if an error is thrown', async done => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -255,7 +255,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should return an error object, with the correct error message if an error is thrown', async (done) => {
+  test('Should return an error object, with the correct error message if an error is thrown', async done => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -287,7 +287,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should not return the rest of the response body on error', async (done) => {
+  test('Should not return the rest of the response body on error', async done => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -318,7 +318,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should ignore the X-Request-ID HTTP Header if disabled in the options', async (done) => {
+  test('Should ignore the X-Request-ID HTTP Header if disabled in the options', async done => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -347,7 +347,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should ignore the Date HTTP Header if disabled in the options', async (done) => {
+  test('Should ignore the Date HTTP Header if disabled in the options', async done => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -376,7 +376,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should ignore the X-Response-Time HTTP Header if disabled in the options', async (done) => {
+  test('Should ignore the X-Response-Time HTTP Header if disabled in the options', async done => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -405,7 +405,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should not ignore the X-Request-ID HTTP Header if enabled in the options', async (done) => {
+  test('Should not ignore the X-Request-ID HTTP Header if enabled in the options', async done => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -434,7 +434,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should not ignore the Date HTTP Header if enabled in the options', async (done) => {
+  test('Should not ignore the Date HTTP Header if enabled in the options', async done => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -463,7 +463,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should not ignore the X-Response-Time HTTP Header if enabled in the options', async (done) => {
+  test('Should not ignore the X-Response-Time HTTP Header if enabled in the options', async done => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -492,7 +492,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should respond with no headers, if all are disabled', async (done) => {
+  test('Should respond with no headers, if all are disabled', async done => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -525,7 +525,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should respond with all headers, if all are enabled', async (done) => {
+  test('Should respond with all headers, if all are enabled', async done => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -555,7 +555,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should still respond correctly with alwaysError option set', async (done) => {
+  test('Should still respond correctly with alwaysError option set', async done => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
@@ -585,7 +585,7 @@ describe('Middleware', () => {
     done();
   });
 
-  test('Should respond with status 500 if a generic error is thrown', async (done) => {
+  test('Should respond with status 500 if a generic error is thrown', async done => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({

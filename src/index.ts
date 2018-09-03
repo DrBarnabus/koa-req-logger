@@ -40,12 +40,12 @@ export interface KoaReqLoggerOptions extends pino.LoggerOptions {
    * Disables the Date header.
    */
 
-   dateHeader?: boolean;
+  dateHeader?: boolean;
 
-   /**
-    * Disables the X-Response-Time header.
-    */
-   responseTimeHeader?: boolean;
+  /**
+   * Disables the X-Response-Time header.
+   */
+  responseTimeHeader?: boolean;
 }
 
 export class KoaReqLogger {
@@ -261,5 +261,4 @@ export class KoaReqLogger {
       this.endRequestError(e, ctx);
     }
   }
-
 }
