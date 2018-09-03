@@ -40,14 +40,15 @@
       "json",
       "node"
     ],
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "testRegex": "(__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "coverageReporters": [
       "text-summary",
       "lcov"
     ],
     "bail": true,
     "testEnvironment": "node",
-    "collectCoverage": true
+    "collectCoverage": true,
+    "testPathIgnorePatterns": ["/node_modules/", "/dist/"]
   },
   "repository": "github:DrBarnabus/koa-req-logger",
   "author": "DrBarnabus <drbarnabus@drbarnabus.com> (https://drbarnabus.com)",
