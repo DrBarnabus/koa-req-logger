@@ -266,4 +266,3 @@ export class KoaReqLogger {
 }
 
 export default KoaReqLogger;
-module.exports = KoaReqLogger;

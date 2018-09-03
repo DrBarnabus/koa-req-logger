@@ -33,7 +33,7 @@ For a full API Reference see the documentation [here⇗](docs/api-reference.md).
 ### JavaScript
 ```js
 const Koa = require('koa');
-const KoaReqLogger = require('koa-req-logger');
+const KoaReqLogger = require('koa-req-logger').KoaReqLogger;
 
 const app = new Koa();
 

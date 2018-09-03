@@ -1,7 +1,7 @@
 import Koa from 'koa';
 import { Context, Middleware } from 'koa';
 import request from 'supertest';
-import { KoaReqLogger, KoaReqLoggerOptions } from '../';
+import { KoaReqLogger } from '../';
 
 describe('Middleware', () => {
   test('getMiddleware() should return a function', () => {
