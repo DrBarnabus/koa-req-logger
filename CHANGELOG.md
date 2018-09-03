@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] - 2018-09-03
+### Fixed
+- Fixed npmignore to include build JavaScript files.
+
 ## [1.3.0] - 2018-09-03
 ### Added
 - Added a TypeScript type declaration file so that the module can be more easily used in a typescript project.
