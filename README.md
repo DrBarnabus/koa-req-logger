@@ -36,7 +36,7 @@ import Koa from 'koa';
 import { KoaReqLogger, KoaReqLoggerOptions } from 'koa-req-logger';
 
 const opts: KoaReqLoggerOptions = {
-  idHeader: false;
+  disableIdHeader: false;
 };
 
 const app = new Koa();

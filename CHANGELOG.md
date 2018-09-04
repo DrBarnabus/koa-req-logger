@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. This projec
 - Changed the options to disable the headers again, the conversion to TypeScript left them reversed so the option enabled it as opposed to disabling. The options are now called disableIdHeader, disableDateHeader and disableResponseTimeHeader. If any set to true, the corresponding header will be disabled.
 ### Fixed
 - Fixed an issue where the header disable options were reversed due to the TypeScript conversion.
+- FIxed a typo in readme documentation.
 
 ## [1.3.8] - 2018-09-03
 ### Changed
