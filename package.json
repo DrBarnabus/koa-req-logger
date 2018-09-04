@@ -1,6 +1,6 @@
 {
   "name": "koa-req-logger",
-  "version": "1.3.10",
+  "version": "1.4.0-dev.0",
   "description": "A koa logging middleware, logs requests and errors. Also adds date and x-response-time to response headers.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
