@@ -11,4 +11,5 @@ install:
   - yarn global add codecov
 script:
   - yarn test
+after_success:
   - codecov
