@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2018-09-19
+### Changed
+- **Breaking Change:** To support user supplied instances of Pino and extreme mode, the way that options are passed to pino has been changed significantly. Please refer to the new documentation to see how to update your implementation of KoaReqLogger.
+
 ## [1.4.0] - 2018-09-04
 ### Changed
 - Changed the options to disable the headers again, the conversion to TypeScript left them reversed so the option enabled it as opposed to disabling. The options are now called disableIdHeader, disableDateHeader and disableResponseTimeHeader. If any set to true, the corresponding header will be disabled.
@@ -71,6 +75,7 @@ First release of the package.
 
 
 <!-- LINKS --->
+[1.5.0]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.3.8...v1.4.0
 [1.3.8]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.3.3...v1.3.8
 [1.3.3]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.3.2...v1.3.3
