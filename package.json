@@ -42,10 +42,6 @@
       "node"
     ],
     "testRegex": "(__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "coverageReporters": [
-      "text-summary",
-      "lcov"
-    ],
     "bail": true,
     "testEnvironment": "node",
     "collectCoverage": true,

@@ -1,5 +1,6 @@
 import Koa from 'koa';
 import { Context, Middleware } from 'koa';
+import pino from 'pino';
 import request from 'supertest';
 import { KoaReqLogger } from '../';
 
@@ -13,7 +14,9 @@ describe('Middleware', () => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      enabled: false
+      pinoOptions: {
+        enabled: false
+      }
     });
     app.use(logger.getMiddleware());
 
@@ -42,7 +45,9 @@ describe('Middleware', () => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      enabled: false
+      pinoOptions: {
+        enabled: false
+      }
     });
     app.use(logger.getMiddleware());
 
@@ -71,7 +76,9 @@ describe('Middleware', () => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      enabled: false
+      pinoOptions: {
+        enabled: false
+      }
     });
     app.use(logger.getMiddleware());
 
@@ -101,7 +108,9 @@ describe('Middleware', () => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      enabled: false
+      pinoOptions: {
+        enabled: false
+      }
     });
     app.use(logger.getMiddleware());
 
@@ -133,7 +142,9 @@ describe('Middleware', () => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      enabled: false,
+      pinoOptions: {
+        enabled: false
+      },
       uuidFunction: () => {
         return 'test-uuid';
       }
@@ -166,7 +177,9 @@ describe('Middleware', () => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      enabled: false
+      pinoOptions: {
+        enabled: false
+      }
     });
     app.use(logger.getMiddleware());
 
@@ -196,7 +209,9 @@ describe('Middleware', () => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      enabled: false
+      pinoOptions: {
+        enabled: false
+      }
     });
     app.use(logger.getMiddleware());
 
@@ -227,7 +242,9 @@ describe('Middleware', () => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      enabled: false
+      pinoOptions: {
+        enabled: false
+      }
     });
     app.use(logger.getMiddleware());
 
@@ -259,7 +276,9 @@ describe('Middleware', () => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      enabled: false
+      pinoOptions: {
+        enabled: false
+      }
     });
     app.use(logger.getMiddleware());
 
@@ -291,7 +310,9 @@ describe('Middleware', () => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      enabled: false
+      pinoOptions: {
+        enabled: false
+      }
     });
     app.use(logger.getMiddleware());
 
@@ -323,7 +344,9 @@ describe('Middleware', () => {
     const app = new Koa();
     const logger = new KoaReqLogger({
       disableIdHeader: true,
-      enabled: false
+      pinoOptions: {
+        enabled: false
+      }
     });
     app.use(logger.getMiddleware());
 
@@ -352,7 +375,9 @@ describe('Middleware', () => {
     const app = new Koa();
     const logger = new KoaReqLogger({
       disableDateHeader: true,
-      enabled: false
+      pinoOptions: {
+        enabled: false
+      }
     });
     app.use(logger.getMiddleware());
 
@@ -381,7 +406,9 @@ describe('Middleware', () => {
     const app = new Koa();
     const logger = new KoaReqLogger({
       disableResponseTimeHeader: true,
-      enabled: false
+      pinoOptions: {
+        enabled: false
+      }
     });
     app.use(logger.getMiddleware());
 
@@ -410,7 +437,9 @@ describe('Middleware', () => {
     const app = new Koa();
     const logger = new KoaReqLogger({
       disableIdHeader: false,
-      enabled: false
+      pinoOptions: {
+        enabled: false
+      }
     });
     app.use(logger.getMiddleware());
 
@@ -439,7 +468,9 @@ describe('Middleware', () => {
     const app = new Koa();
     const logger = new KoaReqLogger({
       disableDateHeader: false,
-      enabled: false
+      pinoOptions: {
+        enabled: false
+      }
     });
     app.use(logger.getMiddleware());
 
@@ -468,7 +499,9 @@ describe('Middleware', () => {
     const app = new Koa();
     const logger = new KoaReqLogger({
       disableResponseTimeHeader: false,
-      enabled: false
+      pinoOptions: {
+        enabled: false
+      }
     });
     app.use(logger.getMiddleware());
 
@@ -499,7 +532,9 @@ describe('Middleware', () => {
       disableDateHeader: true,
       disableIdHeader: true,
       disableResponseTimeHeader: true,
-      enabled: false
+      pinoOptions: {
+        enabled: false
+      }
     });
     app.use(logger.getMiddleware());
 
@@ -529,7 +564,9 @@ describe('Middleware', () => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      enabled: false
+      pinoOptions: {
+        enabled: false
+      }
     });
     app.use(logger.getMiddleware());
 
@@ -560,7 +597,9 @@ describe('Middleware', () => {
     const app = new Koa();
     const logger = new KoaReqLogger({
       alwaysError: true,
-      enabled: false
+      pinoOptions: {
+        enabled: false
+      }
     });
     app.use(logger.getMiddleware());
 
@@ -589,7 +628,9 @@ describe('Middleware', () => {
     // Setup
     const app = new Koa();
     const logger = new KoaReqLogger({
-      enabled: false
+      pinoOptions: {
+        enabled: false
+      }
     });
     app.use(logger.getMiddleware());
 
@@ -614,5 +655,80 @@ describe('Middleware', () => {
     // Teardown
     server.close();
     done();
+  });
+
+  test('Should work correctly when a pino instance is passed in.', async done => {
+    // Setup
+    const app = new Koa();
+    const logger = new KoaReqLogger({
+      pinoInstance: pino({ enabled: false })
+    });
+    app.use(logger.getMiddleware());
+
+    app.use((ctx, next) => {
+      ctx.status = 200;
+      ctx.body = {
+        data: 'Hello World!'
+      };
+    });
+
+    const server = app.listen();
+
+    // Test
+    const response = await request(server).get('/');
+    expect(response.status).toEqual(200);
+    expect(response.header.date).toBeDefined();
+
+    // Teardown
+    server.close();
+    done();
+  });
+
+  test('Should work correctly when extreme mode is enabled', async done => {
+    try {
+      const logger = new KoaReqLogger({
+        extreme: true
+      });
+
+      done();
+    } catch (e) {
+      // Make the test fail as no error should be thrown.
+      expect(true).toBeFalsy();
+      done();
+    }
+  });
+
+  test('Should throw an error if pinoInstance and pinoOptions are passed in at the same time.', async done => {
+    try {
+      const logger = new KoaReqLogger({
+        pinoInstance: pino({ enabled: false }),
+        pinoOptions: {
+          enabled: false
+        }
+      });
+
+      // Fail the test as it should throw an error.
+      expect(false).toBeTruthy();
+      done();
+    } catch (e) {
+      expect(e).toBeDefined();
+      done();
+    }
+  });
+
+  test('Should throw an error if pinoInstance and extreme are passed in at the same time.', async done => {
+    try {
+      const logger = new KoaReqLogger({
+        extreme: false,
+        pinoInstance: pino({ enabled: false })
+      });
+
+      // Fail the test as it should throw an error.
+      expect(false).toBeTruthy();
+      done();
+    } catch (e) {
+      expect(e).toBeDefined();
+      done();
+    }
   });
 });

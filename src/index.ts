@@ -1,7 +1,9 @@
 import { Context } from 'koa';
-import * as pino from 'pino';
-import * as uuidv4 from 'uuid/v4';
+import pino from 'pino';
+import uuidv4 from 'uuid/v4';
 import { errSerializer, reqSerializer, resSerializer } from './serializers';
+
+export { errSerializer, reqSerializer, resSerializer } from './serializers';
 
 declare module 'koa' {
   interface Context {
@@ -12,76 +14,119 @@ declare module 'koa' {
   }
 }
 
+// Workaround for extreme function as it doesn't currently exist in @types/pino
+declare module 'pino' {
+  function extreme(): any;
+}
+
 interface Error {
   status: number;
   message: string;
 }
 
-type RequestIdFunction = () => string;
+/** Function Signature for the optional Request ID Generation Function override. */
+export type RequestIdFunction = () => string;
 
-/**
- * Represents the available options for KoaRequestLogger.
- */
-export interface KoaReqLoggerOptions extends pino.LoggerOptions {
-  /**
-   * Forces the logger to always use the error severity, regardless of the response status.
-   */
+/** A set of configuration options used to configure a new instance of KoaReqLogger. */
+export interface KoaReqLoggerOptions {
+  /** When set to true, this option will force the log severity to be error for all non 2** response statuses. */
   alwaysError?: boolean;
 
   /**
-   * Allows you to provide the default uuid generation function for the request id.
-   * The function should return the uuid as a string.
+   * Allows you to override the default request id generation function.
+   * By default this is set to the uuidv4 function from the uuid node module.
    */
   uuidFunction?: RequestIdFunction;
 
-  /**
-   * Disables the X-Request-ID header.
-   */
+  /** If set to true, this option will stop the X-Request-ID header being added to responses. */
   disableIdHeader?: boolean;
 
-  /**
-   * Disables the Date header.
-   */
-
+  /** If set to true, this option will stop the Date header being added to responses. */
   disableDateHeader?: boolean;
 
-  /**
-   * Disables the X-Response-Time header.
-   */
+  /** If set to true, this option will stop the X-Response-Time header being added to responses. */
   disableResponseTimeHeader?: boolean;
+
+  /**
+   * These options will be passed to pino.
+   * If no serializers for req, res or err are specified the defaults will be used.
+   */
+  pinoOptions?: pino.LoggerOptions;
+
+  /** Configures pino the use extreme mode for added performance. */
+  extreme?: boolean;
+
+  /**
+   * Allows you to pass your own instance of Pino preconfigured to use in the logging middleware.
+   * This option is not compatible with pinoOptions or extreme,
+   * as they don't make sense if you pass a preconfigured pino object.
+   * If a preconfigured instance is used requests, responses and errors will not be serialized.
+   */
+  pinoInstance?: pino.Logger;
 }
 
-/**
- * @class KoaReqLogger
- */
 export class KoaReqLogger {
+  /** Set to true if the X-Request-ID header should be included in responses. */
   private idHeader: boolean;
+
+  /** Set to true if the Date header should be included in responses. */
   private startHeader: boolean;
+
+  /** Set to true if the X-Response-Time header should be included in responses. */
   private responseTimeHeader: boolean;
+
+  /** The function used to generate the ids used in the X-Request-ID header. */
   private uuidFunction: RequestIdFunction;
+
+  /** If set to true, the error severity will be used for all non 2xx status responses. */
   private alwaysError: boolean;
+
+  /** The pino logger instance used internaly by the module. */
   private logger: pino.Logger;
 
   /**
    * Create a new instance of KoaReqLogger to use in a Koa App.
-   * @param options - A set of options to configure KoaReqLogger and Pino.
-   * @param {boolean} options.alwaysError - Always use an error status regardless of HTTP error status.
-   * @param {Function} options.uuidFunction - Overrides the default uuid generation function,
-   * must be a user supplied function that returns a string.
-   * @param {boolean} options.disableIdHeader - Disables the X-Request-ID header.
-   * @param {boolean} options.disableDateHeader - Disables the Date header.
-   * @param {boolean} options.disableResponseTimeHeader - Disables the X-Response-Time header.
+   * @param options - KoaReqLoggerOptions to configure the middleware.
+   * @param options.alwaysError - When set to true, the log severity will be error for all non 2xx status responses.
+   * @param options.uuidFunction - Allows you to override the default X-Request-ID generation function.
+   * @param options.disableIdHeader - If set to true, the X-Request-ID header is not included in responses.
+   * @param options.disableDateHeader - If set to true, the Date header is not included in responses.
+   * @param options.disableResponseTimeHeader - If set to true, the X-Response-Time header is not included in responses.
+   * @param options.pinoOptions - This object will be passed to pino to configure the logger instance.
+   * @param options.extreme - If set to true, the extreme mode of pino will be used for extra performance.
+   * @param options.pinoInstance - Pass in your own preconfigured instance of the pino logger.
    */
   constructor(options?: KoaReqLoggerOptions) {
     this.middleware = this.middleware.bind(this);
 
     const opts: KoaReqLoggerOptions = options || {};
 
-    // Set standard serializers, if no custom ones used
-    opts.serializers = opts.serializers || {};
-    opts.serializers.req = opts.serializers.req || reqSerializer;
-    opts.serializers.res = opts.serializers.res || resSerializer;
-    opts.serializers.err = opts.serializers.err || errSerializer;
+    if (opts.pinoInstance && opts.pinoOptions) {
+      throw new Error('Pino Options cannot be used with a Pino Instance. Only 1 can be used at a time.');
+    }
+
+    if (opts.pinoInstance && opts.extreme) {
+      throw new Error(`Extreme cannot be used with a Pino Instance.
+        Configure extreme mode on the pino instance before passing into koa-req-logger.`);
+    }
+
+    if (opts.pinoInstance) {
+      this.logger = opts.pinoInstance;
+    } else {
+      opts.pinoOptions = opts.pinoOptions || {};
+
+      // Set standard serializers, if no custom ones used
+      opts.pinoOptions.serializers = opts.pinoOptions.serializers || {};
+      opts.pinoOptions.serializers.req = opts.pinoOptions.serializers.req || reqSerializer;
+      opts.pinoOptions.serializers.res = opts.pinoOptions.serializers.res || resSerializer;
+      opts.pinoOptions.serializers.err = opts.pinoOptions.serializers.err || errSerializer;
+
+      if (opts.extreme) {
+        this.logger = pino(opts.pinoOptions, pino.extreme());
+      } else {
+        this.logger = pino(opts.pinoOptions);
+      }
+    }
 
     // Check if X-Request-ID header has been disabled
     if (opts.disableIdHeader == true) {
@@ -109,7 +154,7 @@ export class KoaReqLogger {
       this.uuidFunction = opts.uuidFunction;
       delete opts.uuidFunction;
     } else {
-      this.uuidFunction = uuidv4.default;
+      this.uuidFunction = uuidv4;
     }
 
     delete opts.uuidFunction;
@@ -117,24 +162,20 @@ export class KoaReqLogger {
     this.alwaysError = opts.alwaysError || false;
 
     delete opts.alwaysError;
-
-    this.logger = pino.default(opts);
   }
 
   /**
-   * This function returns the middleware function for use in koa
-   * @api public
+   * This function returns the middleware function for use in koa.
    */
   public getMiddleware() {
     return this.middleware;
   }
 
   /**
-   * This function takes a request context and assigns a request id
-   * This will either be a newly generated uuidv4 or the X-Request-ID header passed into the request
-   * The resulting request id is then set as the X-Request-ID header on the response
-   * @param ctx The current koa response context
-   * @api private
+   * This function takes a request context and assigns a request id.
+   * This will either be a newly generated uuidv4 or the X-Request-ID header passed into the request.
+   * The resulting request id is then set as the X-Request-ID header on the response.
+   * @param ctx - The current koa response context.
    */
   private setRequestId(ctx: Context) {
     if (ctx.get('X-Request-ID')) {
@@ -150,9 +191,8 @@ export class KoaReqLogger {
 
   /**
    * This function sets the current date as the date header,
-   * as well as logging the request and storing the start date for the calculation of the response time later
-   * @param ctx The current koa context
-   * @api private
+   * as well as logging the request and storing the start date for the calculation of the response time later.
+   * @param ctx - The current koa context.
    */
   private startRequest(ctx: Context) {
     ctx.start = new Date();
@@ -167,9 +207,8 @@ export class KoaReqLogger {
   }
 
   /**
-   * This function calcuates the response time and sets the X-Response-Time header
-   * @param ctx The current koa context
-   * @api private
+   * This function calcuates the response time and sets the X-Response-Time header.
+   * @param ctx - The current koa context.
    */
   private setResponseTime(ctx: Context) {
     const now: Date = new Date();
@@ -182,9 +221,8 @@ export class KoaReqLogger {
 
   /**
    * This function logs the end of a request,
-   * it also calls another function to calculate and set the X-Response-Time header
-   * @param ctx The current koa context
-   * @api private
+   * it also calls another function to calculate and set the X-Response-Time header.
+   * @param ctx - The current koa context.
    */
   private endRequest(ctx: Context) {
     this.setResponseTime(ctx);
@@ -197,9 +235,8 @@ export class KoaReqLogger {
 
   /**
    * This function logs the end of a request and the error that has been caught,
-   * it also calls another function to calculate and set the X-Response-Time header
-   * @param ctx The current koa context
-   * @api private
+   * it also calls another function to calculate and set the X-Response-Time header.
+   * @param ctx - The current koa context.
    */
   private endRequestError(e: Error, ctx: Context) {
     this.setResponseTime(ctx);
@@ -238,10 +275,9 @@ export class KoaReqLogger {
   }
 
   /**
-   * This function handles all requests and is used as a koa middleware
-   * @param ctx The current koa context
-   * @param next The next function in the middleware stack
-   * @api private
+   * This function handles all requests and is used as a koa middleware.
+   * @param ctx - The current koa context.
+   * @param next - The next function in the middleware stack.
    */
   private async middleware(ctx: Context, next: any) {
     // Set the request id
