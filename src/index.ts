@@ -105,7 +105,7 @@ export class KoaReqLogger {
       throw new Error('Pino Options cannot be used with a Pino Instance. Only 1 can be used at a time.');
     }
 
-    if (opts.pinoInstance && opts.extreme) {
+    if (opts.pinoInstance && opts.extreme !== undefined) {
       throw new Error(`Extreme cannot be used with a Pino Instance.
         Configure extreme mode on the pino instance before passing into koa-req-logger.`);
     }
