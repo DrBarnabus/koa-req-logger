@@ -28,7 +28,7 @@ npm install koa-req-logger
 
 # Usage
 
-For a full API Reference see the documentation [here⇗](docs/api-reference.md).
+For a full API Reference see the documentation [here⇗](https://drbarnabus.github.io/koa-req-logger/globals.html).
 
 ### TypeScript
 ```ts
