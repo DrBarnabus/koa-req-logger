@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1] - 2018-09-20
+### Fixed
+- Rebuilt the package and republished as the previous version didn't build correctly.
+
 ## [1.5.0] - 2018-09-19
 ### Changed
 - **Breaking Change:** To support user supplied instances of Pino and extreme mode, the way that options are passed to pino has been changed significantly. Please refer to the new documentation to see how to update your implementation of KoaReqLogger.

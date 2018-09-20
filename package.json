@@ -9,7 +9,7 @@
     "pretest": "yarn lint",
     "test": "jest",
     "build": "tsc",
-    "prepublishonly": "yarn build"
+    "prepare": "yarn build"
   },
   "dependencies": {
     "pino": "^5.0.1",
