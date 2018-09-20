@@ -79,6 +79,7 @@ First release of the package.
 
 
 <!-- LINKS --->
+[1.5.1]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.3.8...v1.4.0
 [1.3.8]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.3.3...v1.3.8
