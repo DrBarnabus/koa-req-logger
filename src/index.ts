@@ -195,7 +195,7 @@ export class KoaReqLogger {
    * @param ctx - The current koa context.
    */
   private startRequest(ctx: Context) {
-    ctx.start = new Date();
+    ctx.start = ctx[Symbol.for('request-received.startTime')] ? ctx[Symbol.for('request-received.startTime')] : new Date();
 
     if (this.startHeader) {
       ctx.set('Date', ctx.start.toUTCString());
