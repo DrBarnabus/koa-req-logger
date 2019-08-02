@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.3] - 2019-08-02
+### Changed
+- Updated package dependencies.
+
 ## [1.5.1] - 2018-09-20
 ### Fixed
 - Rebuilt the package and republished as the previous version didn't build correctly.
@@ -79,6 +83,7 @@ First release of the package.
 
 
 <!-- LINKS --->
+[1.5.3]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.5.2...v1.5.3
 [1.5.1]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/DrBarnabus/koa-req-logger/compare/v1.3.8...v1.4.0
